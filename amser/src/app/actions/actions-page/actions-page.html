@@ -10,9 +10,9 @@
         <th>Type</th>
         <th>Task</th>
         <th>Sprint</th>
-        <th>Start</th>
-        <th>End</th>
-        <th>Total Hours</th>
+        <th style="text-align: right">Start</th>
+        <th style="text-align: right">End</th>
+        <th style="text-align: right">Total Hours</th>
         <th style="width: 150px">Actions</th>
       </tr>
     </ng-template>
@@ -21,13 +21,13 @@
         <td>{{ action.actionType }}</td>
         <td>{{ getTaskName(action.taskId) }}</td>
         <td>{{ getSprintName(action.sprintId) }}</td>
-        <td>{{ action.startDateTime | date: 'short' }}</td>
-        <td>
+        <td style="text-align: right">{{ action.startDateTime | date: 'EEE dd-MMM-yyyy HH:mm' }}</td>
+        <td style="text-align: right">
           @if (action.endDateTime) {
-            {{ action.endDateTime | date: 'short' }}
+            {{ action.endDateTime | date: 'EEE dd-MMM-yyyy HH:mm' }}
           }
         </td>
-        <td>
+        <td style="text-align: right">
           @if (action.totalHours !== undefined) {
             {{ action.totalHours }}
           }

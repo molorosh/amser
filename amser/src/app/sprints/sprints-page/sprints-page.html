@@ -8,8 +8,8 @@
     <ng-template #header>
       <tr>
         <th>Name</th>
-        <th>Start Date</th>
-        <th>End Date</th>
+        <th style="text-align: right">Start Date</th>
+        <th style="text-align: right">End Date</th>
         <th>Current</th>
         <th style="width: 150px">Actions</th>
       </tr>
@@ -17,8 +17,8 @@
     <ng-template #body let-sprint>
       <tr>
         <td>{{ sprint.name }}</td>
-        <td>{{ sprint.startDate | date: 'mediumDate' }}</td>
-        <td>{{ sprint.endDate | date: 'mediumDate' }}</td>
+        <td style="text-align: right">{{ sprint.startDate | date: 'EEE dd-MMM-yyyy' }}</td>
+        <td style="text-align: right">{{ sprint.endDate | date: 'EEE dd-MMM-yyyy' }}</td>
         <td>
           @if (sprint.isCurrent) {
             <i class="pi pi-check" style="color: green"></i>
