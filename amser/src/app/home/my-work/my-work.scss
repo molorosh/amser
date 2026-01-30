@@ -1,0 +1,17 @@
+.my-work-container {
+  h2 {
+    margin: 0 0 1rem 0;
+    color: var(--p-text-color);
+  }
+
+  .sprints-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .no-sprints {
+    color: var(--p-text-muted-color);
+    font-style: italic;
+  }
+}

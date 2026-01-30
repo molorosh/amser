@@ -1,0 +1,13 @@
+<div class="my-work-container">
+  <h2>My Work</h2>
+  
+  @if (currentSprints().length > 0) {
+    <div class="sprints-grid">
+      @for (sprint of currentSprints(); track sprint.id) {
+        <app-current-sprint [sprint]="sprint" />
+      }
+    </div>
+  } @else {
+    <p class="no-sprints">No current sprints. Go to Sprints to mark a sprint as current.</p>
+  }
+</div>

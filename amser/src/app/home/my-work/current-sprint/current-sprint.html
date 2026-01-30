@@ -1,0 +1,14 @@
+<div class="current-sprint-card">
+  <div class="sprint-header">
+    <span class="sprint-name">{{ sprint().name }}</span>
+    <span class="current-badge">Current</span>
+  </div>
+  <div class="sprint-dates">
+    <span class="date-label">Start:</span>
+    <span class="date-value">{{ sprint().startDate | date: 'mediumDate' }}</span>
+  </div>
+  <div class="sprint-dates">
+    <span class="date-label">End:</span>
+    <span class="date-value">{{ sprint().endDate | date: 'mediumDate' }}</span>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+.current-sprint-card {
+  background: var(--p-surface-card);
+  border: 1px solid var(--p-surface-border);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  .sprint-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+
+    .sprint-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--p-text-color);
+    }
+
+    .current-badge {
+      background: var(--p-primary-color);
+      color: var(--p-primary-contrast-color);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+  }
+
+  .sprint-dates {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+
+    .date-label {
+      color: var(--p-text-muted-color);
+      min-width: 40px;
+    }
+
+    .date-value {
+      color: var(--p-text-color);
+    }
+  }
+}
