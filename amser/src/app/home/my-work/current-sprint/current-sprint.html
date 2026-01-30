@@ -11,4 +11,22 @@
     <span class="date-label">End:</span>
     <span class="date-value">{{ sprint().endDate | date: 'mediumDate' }}</span>
   </div>
+
+  @if (sprintTasks().length > 0) {
+    <div class="sprint-tasks">
+      <h4>Tasks</h4>
+      <ul class="task-list">
+        @for (sprintTask of sprintTasks(); track sprintTask.task.id) {
+          <li class="task-item">
+            <span class="task-name">{{ sprintTask.task.name }}</span>
+            @if (sprintTask.totalHours > 0) {
+              <span class="task-hours">{{ sprintTask.totalHours | number: '1.1-1' }}h</span>
+            }
+          </li>
+        }
+      </ul>
+    </div>
+  } @else {
+    <p class="no-tasks">No tasks with actions in this sprint.</p>
+  }
 </div>

@@ -4,7 +4,7 @@
   @if (currentSprints().length > 0) {
     <div class="sprints-grid">
       @for (sprint of currentSprints(); track sprint.id) {
-        <app-current-sprint [sprint]="sprint" />
+        <app-current-sprint [sprint]="sprint" [tasks]="tasks()" [actions]="actions()" />
       }
     </div>
   } @else {

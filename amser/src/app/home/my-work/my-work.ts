@@ -1,5 +1,7 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { Sprint } from '../../models/sprint';
+import { Task } from '../../models/task';
+import { Action } from '../../models/action';
 import { PersistenceService } from '../../services/persistence.service';
 import { CurrentSprint } from './current-sprint/current-sprint';
 
@@ -13,14 +15,22 @@ export class MyWork implements OnInit {
   private persistence = inject(PersistenceService);
 
   sprints = signal<Sprint[]>([]);
+  tasks = signal<Task[]>([]);
+  actions = signal<Action[]>([]);
 
   currentSprints = computed(() => 
     this.sprints().filter(sprint => sprint.isCurrent)
-  );
+  )
 
   async ngOnInit() {
     await this.persistence.whenReady();
-    const allSprints = await this.persistence.getAllSprints();
+    const [allSprints, allTasks, allActions] = await Promise.all([
+      this.persistence.getAllSprints(),
+      this.persistence.getAllTasks(),
+      this.persistence.getAllActions(),
+    ]);
     this.sprints.set(allSprints);
+    this.tasks.set(allTasks);
+    this.actions.set(allActions);
   }
 }
