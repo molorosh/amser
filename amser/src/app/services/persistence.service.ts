@@ -1,11 +1,13 @@
 import { Injectable, signal } from '@angular/core';
 import { Task } from '../models/task';
 import { Sprint } from '../models/sprint';
+import { Action } from '../models/action';
 
 const DB_NAME = 'amser-db';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 const TASKS_STORE = 'tasks';
 const SPRINTS_STORE = 'sprints';
+const ACTIONS_STORE = 'actions';
 
 @Injectable({
   providedIn: 'root',
@@ -53,6 +55,14 @@ export class PersistenceService {
           store.createIndex('name', 'name', { unique: false });
           store.createIndex('startDate', 'startDate', { unique: false });
           store.createIndex('endDate', 'endDate', { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains(ACTIONS_STORE)) {
+          const store = db.createObjectStore(ACTIONS_STORE, { keyPath: 'id' });
+          store.createIndex('taskId', 'taskId', { unique: false });
+          store.createIndex('sprintId', 'sprintId', { unique: false });
+          store.createIndex('actionType', 'actionType', { unique: false });
+          store.createIndex('startDateTime', 'startDateTime', { unique: false });
         }
       };
     });
@@ -213,6 +223,111 @@ export class PersistenceService {
     return new Promise((resolve, reject) => {
       try {
         const store = this.getStore(SPRINTS_STORE, 'readwrite');
+        const request = store.clear();
+
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  // Action methods
+  async saveAction(action: Action): Promise<Action> {
+    return new Promise((resolve, reject) => {
+      try {
+        const store = this.getStore(ACTIONS_STORE, 'readwrite');
+        const request = store.put(action);
+
+        request.onsuccess = () => resolve(action);
+        request.onerror = () => reject(request.error);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async getAction(id: string): Promise<Action | undefined> {
+    return new Promise((resolve, reject) => {
+      try {
+        const store = this.getStore(ACTIONS_STORE, 'readonly');
+        const request = store.get(id);
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async getAllActions(): Promise<Action[]> {
+    return new Promise((resolve, reject) => {
+      try {
+        const store = this.getStore(ACTIONS_STORE, 'readonly');
+        const request = store.getAll();
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async getActionsByTask(taskId: string): Promise<Action[]> {
+    return new Promise((resolve, reject) => {
+      try {
+        const store = this.getStore(ACTIONS_STORE, 'readonly');
+        const index = store.index('taskId');
+        const request = index.getAll(taskId);
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async getActionsBySprint(sprintId: string): Promise<Action[]> {
+    return new Promise((resolve, reject) => {
+      try {
+        const store = this.getStore(ACTIONS_STORE, 'readonly');
+        const index = store.index('sprintId');
+        const request = index.getAll(sprintId);
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async deleteAction(id: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        const store = this.getStore(ACTIONS_STORE, 'readwrite');
+        const request = store.delete(id);
+
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async updateAction(action: Action): Promise<Action> {
+    return this.saveAction(action);
+  }
+
+  async clearAllActions(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        const store = this.getStore(ACTIONS_STORE, 'readwrite');
         const request = store.clear();
 
         request.onsuccess = () => resolve();

@@ -12,6 +12,11 @@ export const routes: Routes = [
       import('./sprints/sprints-page/sprints-page').then((m) => m.SprintsPage),
   },
   {
+    path: 'actions',
+    loadComponent: () =>
+      import('./actions/actions-page/actions-page').then((m) => m.ActionsPage),
+  },
+  {
     path: 'admin',
     loadComponent: () =>
       import('./admin/admin-page/admin-page').then((m) => m.AdminPage),

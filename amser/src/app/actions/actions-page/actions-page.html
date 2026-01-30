@@ -1,0 +1,130 @@
+<div class="actions-container">
+  <div class="header">
+    <h1>Actions</h1>
+    <p-button label="New Action" icon="pi pi-plus" (onClick)="openNewActionDialog()" />
+  </div>
+
+  <p-table [value]="actions()" [tableStyle]="{ 'min-width': '60rem' }" styleClass="p-datatable-striped">
+    <ng-template #header>
+      <tr>
+        <th>Type</th>
+        <th>Task</th>
+        <th>Sprint</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Total Hours</th>
+        <th style="width: 150px">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-action>
+      <tr>
+        <td>{{ action.actionType }}</td>
+        <td>{{ getTaskName(action.taskId) }}</td>
+        <td>{{ getSprintName(action.sprintId) }}</td>
+        <td>{{ action.startDateTime | date: 'short' }}</td>
+        <td>
+          @if (action.endDateTime) {
+            {{ action.endDateTime | date: 'short' }}
+          }
+        </td>
+        <td>
+          @if (action.totalHours !== undefined) {
+            {{ action.totalHours }}
+          }
+        </td>
+        <td>
+          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditActionDialog(action)" />
+          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(action)" />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="7" class="empty-message">
+          No actions found. Click "New Action" to create one.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [header]="isEditing() ? 'Edit Action' : 'New Action'"
+  [(visible)]="dialogVisible"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+>
+  <div class="form-container">
+    <div class="field">
+      <label for="actionType">Type *</label>
+      <p-select
+        id="actionType"
+        [options]="actionTypeOptions"
+        [ngModel]="actionType()"
+        (ngModelChange)="actionType.set($event)"
+        optionLabel="label"
+        optionValue="value"
+        styleClass="w-full"
+      />
+    </div>
+
+    <div class="field">
+      <label for="task">Task *</label>
+      <p-select
+        id="task"
+        [options]="tasks()"
+        [ngModel]="actionTaskId()"
+        (ngModelChange)="actionTaskId.set($event)"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Select a task"
+        styleClass="w-full"
+      />
+    </div>
+
+    <div class="field">
+      <label for="sprint">Sprint *</label>
+      <p-select
+        id="sprint"
+        [options]="sprints()"
+        [ngModel]="actionSprintId()"
+        (ngModelChange)="actionSprintId.set($event)"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Select a sprint"
+        styleClass="w-full"
+      />
+    </div>
+
+    <div class="field">
+      <label for="startDateTime">Start Date/Time *</label>
+      <p-datepicker
+        id="startDateTime"
+        [ngModel]="actionStartDateTime()"
+        (ngModelChange)="actionStartDateTime.set($event)"
+        [showTime]="true"
+        dateFormat="dd/mm/yy"
+        styleClass="w-full"
+      />
+    </div>
+
+    <div class="field">
+      <label for="endDateTime">End Date/Time</label>
+      <p-datepicker
+        id="endDateTime"
+        [ngModel]="actionEndDateTime()"
+        (ngModelChange)="actionEndDateTime.set($event)"
+        [showTime]="true"
+        dateFormat="dd/mm/yy"
+        styleClass="w-full"
+      />
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Cancel" [text]="true" (onClick)="cancelDialog()" />
+    <p-button label="Save" (onClick)="saveAction()" [disabled]="!isFormValid()" />
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog />
