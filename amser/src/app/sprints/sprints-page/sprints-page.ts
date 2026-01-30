@@ -35,6 +35,7 @@ export class SprintsPage implements OnInit {
   sprintIsCurrent = signal(false);
 
   async ngOnInit() {
+    await this.persistence.whenReady();
     await this.loadSprints();
   }
 

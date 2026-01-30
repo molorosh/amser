@@ -8,6 +8,7 @@
     <ng-template #header>
       <tr>
         <th>Name</th>
+        <th>Type</th>
         <th>Description</th>
         <th>URL</th>
         <th style="width: 150px">Actions</th>
@@ -16,6 +17,7 @@
     <ng-template #body let-task>
       <tr>
         <td>{{ task.name }}</td>
+        <td>{{ task.taskType ?? 'WorkItem' }}</td>
         <td>{{ task.description }}</td>
         <td>
           @if (task.url) {
@@ -30,7 +32,7 @@
     </ng-template>
     <ng-template #emptymessage>
       <tr>
-        <td colspan="4" class="empty-message">
+        <td colspan="5" class="empty-message">
           No tasks found. Click "New Task" to create one.
         </td>
       </tr>
@@ -48,6 +50,19 @@
     <div class="field">
       <label for="name">Name *</label>
       <input pInputText id="name" [ngModel]="taskName()" (ngModelChange)="taskName.set($event)" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label for="taskType">Type *</label>
+      <p-select
+        id="taskType"
+        [options]="taskTypeOptions"
+        [ngModel]="taskType()"
+        (ngModelChange)="taskType.set($event)"
+        optionLabel="label"
+        optionValue="value"
+        styleClass="w-full"
+      />
     </div>
 
     <div class="field">

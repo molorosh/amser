@@ -13,11 +13,16 @@ const SPRINTS_STORE = 'sprints';
 export class PersistenceService {
   private db: IDBDatabase | null = null;
   private readonly _isReady = signal(false);
+  private dbReadyPromise: Promise<void>;
 
   readonly isReady = this._isReady.asReadonly();
 
   constructor() {
-    this.initDatabase();
+    this.dbReadyPromise = this.initDatabase();
+  }
+
+  async whenReady(): Promise<void> {
+    return this.dbReadyPromise;
   }
 
   private initDatabase(): Promise<void> {
@@ -96,7 +101,14 @@ export class PersistenceService {
         const store = this.getStore(TASKS_STORE, 'readonly');
         const request = store.getAll();
 
-        request.onsuccess = () => resolve(request.result);
+        request.onsuccess = () => {
+          // Ensure existing tasks have taskType set to WorkItem
+          const tasks = (request.result as Task[]).map((task) => ({
+            ...task,
+            taskType: task.taskType ?? 'WorkItem',
+          }));
+          resolve(tasks);
+        };
         request.onerror = () => reject(request.error);
       } catch (error) {
         reject(error);

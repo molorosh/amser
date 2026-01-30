@@ -5,14 +5,16 @@ import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
+import { Select } from 'primeng/select';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { Task, createTask } from '../../models/task';
+import { TaskType } from '../../models/task-type';
 import { PersistenceService } from '../../services/persistence.service';
 
 @Component({
   selector: 'app-tasks-page',
-  imports: [FormsModule, TableModule, Button, Dialog, InputText, Textarea, ConfirmDialog],
+  imports: [FormsModule, TableModule, Button, Dialog, InputText, Textarea, Select, ConfirmDialog],
   providers: [ConfirmationService],
   templateUrl: './tasks-page.html',
   styleUrl: './tasks-page.scss',
@@ -30,8 +32,17 @@ export class TasksPage implements OnInit {
   taskName = signal('');
   taskDescription = signal('');
   taskUrl = signal('');
+  taskType = signal<TaskType>(TaskType.WorkItem);
+
+  taskTypeOptions = [
+    { label: 'Work Item', value: TaskType.WorkItem },
+    { label: 'Meeting', value: TaskType.Meeting },
+    { label: 'People', value: TaskType.People },
+    { label: 'Other', value: TaskType.Other },
+  ];
 
   async ngOnInit() {
+    await this.persistence.whenReady();
     await this.loadTasks();
   }
 
@@ -46,6 +57,7 @@ export class TasksPage implements OnInit {
     this.taskName.set('');
     this.taskDescription.set('');
     this.taskUrl.set('');
+    this.taskType.set(TaskType.WorkItem);
     this.dialogVisible.set(true);
   }
 
@@ -55,6 +67,7 @@ export class TasksPage implements OnInit {
     this.taskName.set(task.name);
     this.taskDescription.set(task.description);
     this.taskUrl.set(task.url);
+    this.taskType.set(task.taskType ?? TaskType.WorkItem);
     this.dialogVisible.set(true);
   }
 
@@ -69,13 +82,15 @@ export class TasksPage implements OnInit {
         name: this.taskName(),
         description: this.taskDescription(),
         url: this.taskUrl(),
+        taskType: this.taskType(),
       };
       await this.persistence.updateTask(updatedTask);
     } else {
       const newTask = createTask(
         this.taskName(),
         this.taskDescription(),
-        this.taskUrl()
+        this.taskUrl(),
+        this.taskType()
       );
       await this.persistence.saveTask(newTask);
     }
