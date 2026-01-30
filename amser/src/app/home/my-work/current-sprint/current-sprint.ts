@@ -3,6 +3,7 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { Sprint } from '../../../models/sprint';
 import { Task } from '../../../models/task';
 import { Action } from '../../../models/action';
+import { TaskType } from '../../../models/task-type';
 import { SprintTask, createSprintTasks } from '../../../models/sprint-task';
 
 @Component({
@@ -18,5 +19,22 @@ export class CurrentSprint {
 
   sprintTasks = computed<SprintTask[]>(() => 
     createSprintTasks(this.sprint().id, this.tasks(), this.actions())
+  );
+
+  // Group sprint tasks by TaskType with WorkItem first
+  workItemTasks = computed(() => 
+    this.sprintTasks().filter(st => st.task.taskType === TaskType.WorkItem)
+  );
+
+  meetingTasks = computed(() => 
+    this.sprintTasks().filter(st => st.task.taskType === TaskType.Meeting)
+  );
+
+  peopleTasks = computed(() => 
+    this.sprintTasks().filter(st => st.task.taskType === TaskType.People)
+  );
+
+  otherTasks = computed(() => 
+    this.sprintTasks().filter(st => st.task.taskType === TaskType.Other)
   );
 }

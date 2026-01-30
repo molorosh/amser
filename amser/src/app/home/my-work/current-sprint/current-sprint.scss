@@ -49,12 +49,20 @@
     padding-top: 1rem;
     border-top: 1px solid var(--p-surface-border);
 
-    h4 {
-      margin: 0 0 0.5rem 0;
-      font-size: 0.9rem;
-      color: var(--p-text-muted-color);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    .task-group {
+      margin-bottom: 1rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 0.85rem;
+        color: var(--p-text-muted-color);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
     }
 
     .task-list {
