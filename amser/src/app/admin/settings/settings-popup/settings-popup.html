@@ -1,1 +1,50 @@
-<p>settings-popup works!</p>
+<div class="settings-form">
+  <div class="field">
+    <label for="appName">Application Name</label>
+    <input pInputText id="appName" [ngModel]="appName()" (ngModelChange)="appName.set($event)" />
+  </div>
+
+  <p-divider />
+
+  <div class="field">
+    <label for="language">Language</label>
+    <p-select
+      id="language"
+      [options]="languages"
+      [ngModel]="selectedLanguage()"
+      (ngModelChange)="selectedLanguage.set($event)"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Select a language"
+      styleClass="w-full"
+    />
+  </div>
+
+  <p-divider />
+
+  <div class="field-checkbox">
+    <p-checkbox
+      inputId="notifications"
+      [ngModel]="enableNotifications()"
+      (ngModelChange)="enableNotifications.set($event)"
+      [binary]="true"
+    />
+    <label for="notifications">Enable Notifications</label>
+  </div>
+
+  <div class="field-checkbox">
+    <p-checkbox
+      inputId="darkMode"
+      [ngModel]="enableDarkMode()"
+      (ngModelChange)="enableDarkMode.set($event)"
+      [binary]="true"
+    />
+    <label for="darkMode">Enable Dark Mode</label>
+  </div>
+
+  <p-divider />
+
+  <div class="actions">
+    <p-button label="Save Settings" (onClick)="saveSettings()" />
+  </div>
+</div>
