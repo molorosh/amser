@@ -21,9 +21,4 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./actions/actions-page/actions-page').then((m) => m.ActionsPage),
   },
-  {
-    path: 'admin',
-    loadComponent: () =>
-      import('./admin/admin-page/admin-page').then((m) => m.AdminPage),
-  },
 ];
