@@ -1,0 +1,77 @@
+<div class="tasks-container">
+  <div class="header">
+    <h1>Tasks</h1>
+    <p-button label="New Task" icon="pi pi-plus" (onClick)="openNewTaskDialog()" />
+  </div>
+
+  <p-table [value]="tasks()" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
+    <ng-template #header>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>URL</th>
+        <th style="width: 150px">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-task>
+      <tr>
+        <td>{{ task.name }}</td>
+        <td>{{ task.description }}</td>
+        <td>
+          @if (task.url) {
+            <a [href]="task.url" target="_blank" rel="noopener">{{ task.url }}</a>
+          }
+        </td>
+        <td>
+          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditTaskDialog(task)" />
+          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(task)" />
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="4" class="empty-message">
+          No tasks found. Click "New Task" to create one.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [header]="isEditing() ? 'Edit Task' : 'New Task'"
+  [(visible)]="dialogVisible"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+>
+  <div class="form-container">
+    <div class="field">
+      <label for="name">Name *</label>
+      <input pInputText id="name" [ngModel]="taskName()" (ngModelChange)="taskName.set($event)" class="w-full" />
+    </div>
+
+    <div class="field">
+      <label for="description">Description</label>
+      <textarea
+        pTextarea
+        id="description"
+        [ngModel]="taskDescription()"
+        (ngModelChange)="taskDescription.set($event)"
+        rows="3"
+        class="w-full"
+      ></textarea>
+    </div>
+
+    <div class="field">
+      <label for="url">URL</label>
+      <input pInputText id="url" [ngModel]="taskUrl()" (ngModelChange)="taskUrl.set($event)" class="w-full" />
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button label="Cancel" [text]="true" (onClick)="cancelDialog()" />
+    <p-button label="Save" (onClick)="saveTask()" [disabled]="!taskName().trim()" />
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog />
