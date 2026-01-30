@@ -112,10 +112,11 @@ export class PersistenceService {
         const request = store.getAll();
 
         request.onsuccess = () => {
-          // Ensure existing tasks have taskType set to WorkItem
+          // Ensure existing tasks have default values for newer properties
           const tasks = (request.result as Task[]).map((task) => ({
             ...task,
             taskType: task.taskType ?? 'WorkItem',
+            autoAllocate: task.autoAllocate ?? false,
           }));
           resolve(tasks);
         };

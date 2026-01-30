@@ -6,6 +6,7 @@ import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
+import { Checkbox } from 'primeng/checkbox';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { Task, createTask } from '../../models/task';
@@ -14,7 +15,7 @@ import { PersistenceService } from '../../services/persistence.service';
 
 @Component({
   selector: 'app-tasks-page',
-  imports: [FormsModule, TableModule, Button, Dialog, InputText, Textarea, Select, ConfirmDialog],
+  imports: [FormsModule, TableModule, Button, Dialog, InputText, Textarea, Select, Checkbox, ConfirmDialog],
   providers: [ConfirmationService],
   templateUrl: './tasks-page.html',
   styleUrl: './tasks-page.scss',
@@ -33,6 +34,7 @@ export class TasksPage implements OnInit {
   taskDescription = signal('');
   taskUrl = signal('');
   taskType = signal<TaskType>(TaskType.WorkItem);
+  taskAutoAllocate = signal(false);
 
   taskTypeOptions = [
     { label: 'Work Item', value: TaskType.WorkItem },
@@ -58,6 +60,7 @@ export class TasksPage implements OnInit {
     this.taskDescription.set('');
     this.taskUrl.set('');
     this.taskType.set(TaskType.WorkItem);
+    this.taskAutoAllocate.set(false);
     this.dialogVisible.set(true);
   }
 
@@ -68,6 +71,7 @@ export class TasksPage implements OnInit {
     this.taskDescription.set(task.description);
     this.taskUrl.set(task.url);
     this.taskType.set(task.taskType ?? TaskType.WorkItem);
+    this.taskAutoAllocate.set(task.autoAllocate ?? false);
     this.dialogVisible.set(true);
   }
 
@@ -83,6 +87,7 @@ export class TasksPage implements OnInit {
         description: this.taskDescription(),
         url: this.taskUrl(),
         taskType: this.taskType(),
+        autoAllocate: this.taskAutoAllocate(),
       };
       await this.persistence.updateTask(updatedTask);
     } else {
@@ -90,7 +95,8 @@ export class TasksPage implements OnInit {
         this.taskName(),
         this.taskDescription(),
         this.taskUrl(),
-        this.taskType()
+        this.taskType(),
+        this.taskAutoAllocate()
       );
       await this.persistence.saveTask(newTask);
     }

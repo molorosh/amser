@@ -9,6 +9,7 @@
       <tr>
         <th>Name</th>
         <th>Type</th>
+        <th>Auto Allocate</th>
         <th>Description</th>
         <th>URL</th>
         <th style="width: 150px">Actions</th>
@@ -18,6 +19,11 @@
       <tr>
         <td>{{ task.name }}</td>
         <td>{{ task.taskType ?? 'WorkItem' }}</td>
+        <td>
+          @if (task.autoAllocate) {
+            <i class="pi pi-check"></i>
+          }
+        </td>
         <td>{{ task.description }}</td>
         <td>
           @if (task.url) {
@@ -32,7 +38,7 @@
     </ng-template>
     <ng-template #emptymessage>
       <tr>
-        <td colspan="5" class="empty-message">
+        <td colspan="6" class="empty-message">
           No tasks found. Click "New Task" to create one.
         </td>
       </tr>
@@ -80,6 +86,16 @@
     <div class="field">
       <label for="url">URL</label>
       <input pInputText id="url" [ngModel]="taskUrl()" (ngModelChange)="taskUrl.set($event)" class="w-full" />
+    </div>
+
+    <div class="field-checkbox">
+      <p-checkbox
+        inputId="autoAllocate"
+        [ngModel]="taskAutoAllocate()"
+        (ngModelChange)="taskAutoAllocate.set($event)"
+        [binary]="true"
+      />
+      <label for="autoAllocate">Auto Allocate</label>
     </div>
   </div>
 
