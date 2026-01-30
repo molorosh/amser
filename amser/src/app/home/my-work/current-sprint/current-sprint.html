@@ -21,9 +21,18 @@
             @for (sprintTask of workItemTasks(); track sprintTask.task.id) {
               <li class="task-item">
                 <span class="task-name">{{ sprintTask.task.name }}</span>
-                @if (sprintTask.totalHours > 0) {
-                  <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
-                }
+                <div class="task-actions">
+                  @if (sprintTask.totalHours > 0) {
+                    <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
+                  }
+                  <span class="hover-button">
+                    @if (hasInProgressTimer(sprintTask)) {
+                      <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
+                    } @else {
+                      <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
+                    }
+                  </span>
+                </div>
               </li>
             }
           </ul>
@@ -37,9 +46,18 @@
             @for (sprintTask of meetingTasks(); track sprintTask.task.id) {
               <li class="task-item">
                 <span class="task-name">{{ sprintTask.task.name }}</span>
-                @if (sprintTask.totalHours > 0) {
-                  <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
-                }
+                <div class="task-actions">
+                  @if (sprintTask.totalHours > 0) {
+                    <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
+                  }
+                  <span class="hover-button">
+                    @if (hasInProgressTimer(sprintTask)) {
+                      <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
+                    } @else {
+                      <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
+                    }
+                  </span>
+                </div>
               </li>
             }
           </ul>
@@ -53,9 +71,18 @@
             @for (sprintTask of peopleTasks(); track sprintTask.task.id) {
               <li class="task-item">
                 <span class="task-name">{{ sprintTask.task.name }}</span>
-                @if (sprintTask.totalHours > 0) {
-                  <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
-                }
+                <div class="task-actions">
+                  @if (sprintTask.totalHours > 0) {
+                    <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
+                  }
+                  <span class="hover-button">
+                    @if (hasInProgressTimer(sprintTask)) {
+                      <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
+                    } @else {
+                      <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
+                    }
+                  </span>
+                </div>
               </li>
             }
           </ul>
@@ -69,9 +96,18 @@
             @for (sprintTask of otherTasks(); track sprintTask.task.id) {
               <li class="task-item">
                 <span class="task-name">{{ sprintTask.task.name }}</span>
-                @if (sprintTask.totalHours > 0) {
-                  <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
-                }
+                <div class="task-actions">
+                  @if (sprintTask.totalHours > 0) {
+                    <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
+                  }
+                  <span class="hover-button">
+                    @if (hasInProgressTimer(sprintTask)) {
+                      <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
+                    } @else {
+                      <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
+                    }
+                  </span>
+                </div>
               </li>
             }
           </ul>

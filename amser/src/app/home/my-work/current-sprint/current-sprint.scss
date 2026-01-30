@@ -86,6 +86,12 @@
           font-size: 0.9rem;
         }
 
+        .task-actions {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
         .task-hours {
           background: var(--p-surface-100);
           color: var(--p-text-color);
@@ -93,6 +99,15 @@
           border-radius: 4px;
           font-size: 0.8rem;
           font-weight: 600;
+        }
+
+        .hover-button {
+          opacity: 0;
+          transition: opacity 0.2s ease;
+        }
+
+        &:hover .hover-button {
+          opacity: 1;
         }
       }
     }

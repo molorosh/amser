@@ -11,7 +11,13 @@
   @if (currentSprints().length > 0) {
     <div class="sprints-grid">
       @for (sprint of currentSprints(); track sprint.id) {
-        <app-current-sprint [sprint]="sprint" [tasks]="tasks()" [actions]="actions()" [displayMode]="displayMode()" />
+        <app-current-sprint 
+          [sprint]="sprint" 
+          [tasks]="tasks()" 
+          [actions]="actions()" 
+          [displayMode]="displayMode()"
+          (timerStarted)="onTimerStarted($event)"
+          (timerStopped)="onTimerStopped($event)" />
       }
     </div>
   } @else {
