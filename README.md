@@ -1,20 +1,51 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+Time Tracking Software implemented in Angular v21 
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+# Initial Setup and ng21 local install
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+open a terminal and navigate to your source folder
+```
+~>cd source\repos
+```
+now clone the repo
+```
+~\source\repos> git clone https://HRicketts@dev.azure.com/HRicketts/Training%20Day/_git/tracker
+```
+```
+~\source\repos> cd tracker
+```
+check the angular version installed globally
+```
+~\source\repos\tracker> ng --version 
+```
+19.1.2, opps! not the version I want 
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+opps the wrong version
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+~\source\repos\tracker> npm install @angular/cli@21 --save-dev
+
+also create a .gitignore file that just contains a single line:
+```
+/node_modules
+```
+check the local version
+```
+~\source\repos\tracker> ng --version 
+```
+21.1.12
+
+yay! now we are ready to go
+
+```
+~\source\repos\tracker> ng new amser
+```
+
+The settings I chose for new project creation were:
+- Which stylesheet format would you like to use? `Sass(SCSS)` 
+- Do you want to enable Server-Side Rendering (SSR) and Static Site Generation (SSG/Prerendering)? `No`
+
+Note: Amser is the welsh word for "time".
+
+
+
+
