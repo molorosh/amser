@@ -4,17 +4,18 @@ import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
+import { InputNumber } from 'primeng/inputnumber';
 import { DatePicker } from 'primeng/datepicker';
 import { Checkbox } from 'primeng/checkbox';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
-import { Sprint, createSprint } from '../../models/sprint';
+import { Sprint, createSprint, calculateMaxHours } from '../../models/sprint';
 import { PersistenceService } from '../../services/persistence.service';
 
 @Component({
   selector: 'app-sprints-page',
-  imports: [FormsModule, TableModule, Button, Dialog, InputText, DatePicker, Checkbox, ConfirmDialog, DatePipe],
+  imports: [FormsModule, TableModule, Button, Dialog, InputText, InputNumber, DatePicker, Checkbox, ConfirmDialog, DatePipe],
   providers: [ConfirmationService],
   templateUrl: './sprints-page.html',
   styleUrl: './sprints-page.scss',
@@ -33,6 +34,12 @@ export class SprintsPage implements OnInit {
   sprintStartDate = signal<Date | null>(null);
   sprintEndDate = signal<Date | null>(null);
   sprintIsCurrent = signal(false);
+  sprintHoursPerDay = signal(6);
+  sprintDaysPerSprint = signal(8);
+
+  getMaxHours(sprint: Sprint): number {
+    return calculateMaxHours(sprint);
+  }
 
   async ngOnInit() {
     await this.persistence.whenReady();
@@ -51,6 +58,8 @@ export class SprintsPage implements OnInit {
     this.sprintStartDate.set(null);
     this.sprintEndDate.set(null);
     this.sprintIsCurrent.set(false);
+    this.sprintHoursPerDay.set(6);
+    this.sprintDaysPerSprint.set(8);
     this.dialogVisible.set(true);
   }
 
@@ -61,6 +70,8 @@ export class SprintsPage implements OnInit {
     this.sprintStartDate.set(new Date(sprint.startDate));
     this.sprintEndDate.set(new Date(sprint.endDate));
     this.sprintIsCurrent.set(sprint.isCurrent);
+    this.sprintHoursPerDay.set(sprint.hoursPerDay ?? 6);
+    this.sprintDaysPerSprint.set(sprint.daysPerSprint ?? 8);
     this.dialogVisible.set(true);
   }
 
@@ -68,7 +79,9 @@ export class SprintsPage implements OnInit {
     return !!(
       this.sprintName().trim() &&
       this.sprintStartDate() &&
-      this.sprintEndDate()
+      this.sprintEndDate() &&
+      this.sprintHoursPerDay() > 0 &&
+      this.sprintDaysPerSprint() > 0
     );
   }
 
@@ -84,6 +97,8 @@ export class SprintsPage implements OnInit {
         startDate: this.sprintStartDate()!,
         endDate: this.sprintEndDate()!,
         isCurrent: this.sprintIsCurrent(),
+        hoursPerDay: this.sprintHoursPerDay(),
+        daysPerSprint: this.sprintDaysPerSprint(),
       };
       await this.persistence.updateSprint(updatedSprint);
     } else {
@@ -91,7 +106,9 @@ export class SprintsPage implements OnInit {
         this.sprintName(),
         this.sprintStartDate()!,
         this.sprintEndDate()!,
-        this.sprintIsCurrent()
+        this.sprintIsCurrent(),
+        this.sprintHoursPerDay(),
+        this.sprintDaysPerSprint()
       );
       await this.persistence.saveSprint(newSprint);
     }

@@ -22,7 +22,7 @@
               <li class="task-item">
                 <span class="task-name">{{ sprintTask.task.name }}</span>
                 @if (sprintTask.totalHours > 0) {
-                  <span class="task-hours">{{ sprintTask.totalHours | number: '1.1-1' }}h</span>
+                  <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
                 }
               </li>
             }
@@ -38,7 +38,7 @@
               <li class="task-item">
                 <span class="task-name">{{ sprintTask.task.name }}</span>
                 @if (sprintTask.totalHours > 0) {
-                  <span class="task-hours">{{ sprintTask.totalHours | number: '1.1-1' }}h</span>
+                  <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
                 }
               </li>
             }
@@ -54,7 +54,7 @@
               <li class="task-item">
                 <span class="task-name">{{ sprintTask.task.name }}</span>
                 @if (sprintTask.totalHours > 0) {
-                  <span class="task-hours">{{ sprintTask.totalHours | number: '1.1-1' }}h</span>
+                  <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
                 }
               </li>
             }
@@ -70,7 +70,7 @@
               <li class="task-item">
                 <span class="task-name">{{ sprintTask.task.name }}</span>
                 @if (sprintTask.totalHours > 0) {
-                  <span class="task-hours">{{ sprintTask.totalHours | number: '1.1-1' }}h</span>
+                  <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
                 }
               </li>
             }

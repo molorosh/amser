@@ -194,7 +194,15 @@ export class PersistenceService {
         const store = this.getStore(SPRINTS_STORE, 'readonly');
         const request = store.getAll();
 
-        request.onsuccess = () => resolve(request.result);
+        request.onsuccess = () => {
+          // Ensure existing sprints have default values for newer properties
+          const sprints = (request.result as Sprint[]).map((sprint) => ({
+            ...sprint,
+            hoursPerDay: sprint.hoursPerDay ?? 6,
+            daysPerSprint: sprint.daysPerSprint ?? 8,
+          }));
+          resolve(sprints);
+        };
         request.onerror = () => reject(request.error);
       } catch (error) {
         reject(error);

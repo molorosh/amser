@@ -10,6 +10,9 @@
         <th>Name</th>
         <th style="text-align: right">Start Date</th>
         <th style="text-align: right">End Date</th>
+        <th style="text-align: right">Hours/Day</th>
+        <th style="text-align: right">Days</th>
+        <th style="text-align: right">Max Hours</th>
         <th>Current</th>
         <th style="width: 150px">Actions</th>
       </tr>
@@ -19,6 +22,9 @@
         <td>{{ sprint.name }}</td>
         <td style="text-align: right">{{ sprint.startDate | date: 'EEE dd-MMM-yyyy' }}</td>
         <td style="text-align: right">{{ sprint.endDate | date: 'EEE dd-MMM-yyyy' }}</td>
+        <td style="text-align: right">{{ sprint.hoursPerDay }}</td>
+        <td style="text-align: right">{{ sprint.daysPerSprint }}</td>
+        <td style="text-align: right">{{ getMaxHours(sprint) }}</td>
         <td>
           @if (sprint.isCurrent) {
             <i class="pi pi-check" style="color: green"></i>
@@ -32,7 +38,7 @@
     </ng-template>
     <ng-template #emptymessage>
       <tr>
-        <td colspan="5" class="empty-message">
+        <td colspan="8" class="empty-message">
           No sprints found. Click "New Sprint" to create one.
         </td>
       </tr>
@@ -70,6 +76,28 @@
         [ngModel]="sprintEndDate()"
         (ngModelChange)="sprintEndDate.set($event)"
         dateFormat="dd/mm/yy"
+        styleClass="w-full"
+      />
+    </div>
+
+    <div class="field">
+      <label for="hoursPerDay">Hours per Day *</label>
+      <p-inputnumber
+        id="hoursPerDay"
+        [ngModel]="sprintHoursPerDay()"
+        (ngModelChange)="sprintHoursPerDay.set($event)"
+        [min]="1"
+        styleClass="w-full"
+      />
+    </div>
+
+    <div class="field">
+      <label for="daysPerSprint">Days per Sprint *</label>
+      <p-inputnumber
+        id="daysPerSprint"
+        [ngModel]="sprintDaysPerSprint()"
+        (ngModelChange)="sprintDaysPerSprint.set($event)"
+        [min]="1"
         styleClass="w-full"
       />
     </div>

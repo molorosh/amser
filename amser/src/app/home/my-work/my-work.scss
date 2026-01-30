@@ -1,7 +1,27 @@
 .my-work-container {
-  h2 {
-    margin: 0 0 1rem 0;
-    color: var(--p-text-color);
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h2 {
+      margin: 0;
+      color: var(--p-text-color);
+    }
+  }
+
+  .display-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--p-text-muted-color);
+
+    span.active {
+      color: var(--p-primary-color);
+      font-weight: 600;
+    }
   }
 
   .sprints-grid {

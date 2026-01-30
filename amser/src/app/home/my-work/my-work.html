@@ -1,10 +1,17 @@
 <div class="my-work-container">
-  <h2>My Work</h2>
+  <div class="header">
+    <h2>My Work</h2>
+    <div class="display-toggle">
+      <span [class.active]="!showDays()">Hours</span>
+      <p-toggleswitch [(ngModel)]="showDays" />
+      <span [class.active]="showDays()">Days</span>
+    </div>
+  </div>
   
   @if (currentSprints().length > 0) {
     <div class="sprints-grid">
       @for (sprint of currentSprints(); track sprint.id) {
-        <app-current-sprint [sprint]="sprint" [tasks]="tasks()" [actions]="actions()" />
+        <app-current-sprint [sprint]="sprint" [tasks]="tasks()" [actions]="actions()" [displayMode]="displayMode()" />
       }
     </div>
   } @else {

@@ -1,13 +1,17 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ToggleSwitch } from 'primeng/toggleswitch';
 import { Sprint } from '../../models/sprint';
 import { Task } from '../../models/task';
 import { Action } from '../../models/action';
 import { PersistenceService } from '../../services/persistence.service';
 import { CurrentSprint } from './current-sprint/current-sprint';
 
+export type TimeDisplayMode = 'hours' | 'days';
+
 @Component({
   selector: 'app-my-work',
-  imports: [CurrentSprint],
+  imports: [FormsModule, ToggleSwitch, CurrentSprint],
   templateUrl: './my-work.html',
   styleUrl: './my-work.scss',
 })
@@ -17,6 +21,11 @@ export class MyWork implements OnInit {
   sprints = signal<Sprint[]>([]);
   tasks = signal<Task[]>([]);
   actions = signal<Action[]>([]);
+  showDays = signal(false);
+
+  displayMode = computed<TimeDisplayMode>(() => 
+    this.showDays() ? 'days' : 'hours'
+  );
 
   currentSprints = computed(() => 
     this.sprints().filter(sprint => sprint.isCurrent)
