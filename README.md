@@ -34,15 +34,16 @@ check the local version
 ```
 21.1.12
 
-yay! now we are ready to go
+yay! now we are ready to go.  We're using npx instead of npm so that we use the local version of Angular.
 
 ```
-~\source\repos\tracker> ng new amser
+~\source\repos\tracker> npx ng new amser
 ```
 
 The settings I chose for new project creation were:
 - Which stylesheet format would you like to use? `Sass(SCSS)` 
 - Do you want to enable Server-Side Rendering (SSR) and Static Site Generation (SSG/Prerendering)? `No`
+- Which AI tools do you want to use?: `GitHub Copilot`
 
 Note: Amser is the welsh word for "time".
 
