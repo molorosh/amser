@@ -20,7 +20,16 @@
           <ul class="task-list">
             @for (sprintTask of workItemTasks(); track sprintTask.task.id) {
               <li class="task-item">
-                <span class="task-name">{{ sprintTask.task.name }}</span>
+                <span class="task-name">
+                  @if (hasInProgressTimer(sprintTask)) {
+                    <span class="in-progress-indicator">
+                      <span class="dot"></span>
+                      <span class="dot"></span>
+                      <span class="dot"></span>
+                    </span>
+                  }
+                  {{ sprintTask.task.name }}
+                </span>
                 <div class="task-actions">
                   @if (sprintTask.totalHours > 0) {
                     <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
@@ -45,7 +54,16 @@
           <ul class="task-list">
             @for (sprintTask of meetingTasks(); track sprintTask.task.id) {
               <li class="task-item">
-                <span class="task-name">{{ sprintTask.task.name }}</span>
+                <span class="task-name">
+                  @if (hasInProgressTimer(sprintTask)) {
+                    <span class="in-progress-indicator">
+                      <span class="dot"></span>
+                      <span class="dot"></span>
+                      <span class="dot"></span>
+                    </span>
+                  }
+                  {{ sprintTask.task.name }}
+                </span>
                 <div class="task-actions">
                   @if (sprintTask.totalHours > 0) {
                     <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
@@ -70,7 +88,16 @@
           <ul class="task-list">
             @for (sprintTask of peopleTasks(); track sprintTask.task.id) {
               <li class="task-item">
-                <span class="task-name">{{ sprintTask.task.name }}</span>
+                <span class="task-name">
+                  @if (hasInProgressTimer(sprintTask)) {
+                    <span class="in-progress-indicator">
+                      <span class="dot"></span>
+                      <span class="dot"></span>
+                      <span class="dot"></span>
+                    </span>
+                  }
+                  {{ sprintTask.task.name }}
+                </span>
                 <div class="task-actions">
                   @if (sprintTask.totalHours > 0) {
                     <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
@@ -95,7 +122,16 @@
           <ul class="task-list">
             @for (sprintTask of otherTasks(); track sprintTask.task.id) {
               <li class="task-item">
-                <span class="task-name">{{ sprintTask.task.name }}</span>
+                <span class="task-name">
+                  @if (hasInProgressTimer(sprintTask)) {
+                    <span class="in-progress-indicator">
+                      <span class="dot"></span>
+                      <span class="dot"></span>
+                      <span class="dot"></span>
+                    </span>
+                  }
+                  {{ sprintTask.task.name }}
+                </span>
                 <div class="task-actions">
                   @if (sprintTask.totalHours > 0) {
                     <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
