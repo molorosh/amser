@@ -7,6 +7,7 @@
   <p-table [value]="actions()" [tableStyle]="{ 'min-width': '60rem' }" styleClass="p-datatable-striped">
     <ng-template #header>
       <tr>
+        <th style="width: 40px"></th>
         <th>Type</th>
         <th>Task</th>
         <th>Sprint</th>
@@ -17,7 +18,12 @@
       </tr>
     </ng-template>
     <ng-template #body let-action>
-      <tr>
+      <tr [class.in-progress]="action.actionType === ActionType.Time && action.startDateTime && !action.endDateTime">
+        <td class="icon-cell">
+          @if (action.actionType === ActionType.Time && action.startDateTime && !action.endDateTime) {
+            <i class="pi pi-stopwatch"></i>
+          }
+        </td>
         <td>{{ action.actionType }}</td>
         <td>{{ getTaskName(action.taskId) }}</td>
         <td>{{ getSprintName(action.sprintId) }}</td>
@@ -40,7 +46,7 @@
     </ng-template>
     <ng-template #emptymessage>
       <tr>
-        <td colspan="7" class="empty-message">
+        <td colspan="8" class="empty-message">
           No actions found. Click "New Action" to create one.
         </td>
       </tr>

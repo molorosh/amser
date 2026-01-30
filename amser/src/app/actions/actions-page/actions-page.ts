@@ -25,6 +25,8 @@ export class ActionsPage implements OnInit {
   private persistence = inject(PersistenceService);
   private confirmationService = inject(ConfirmationService);
 
+  readonly ActionType = ActionType;
+
   actions = signal<Action[]>([]);
   tasks = signal<Task[]>([]);
   sprints = signal<Sprint[]>([]);

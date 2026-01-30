@@ -18,6 +18,15 @@
     padding: 2rem;
     color: var(--p-text-muted-color);
   }
+
+  .icon-cell {
+    text-align: center;
+    color: var(--p-primary-color);
+  }
+
+  tr.in-progress td {
+    font-weight: 700;
+  }
 }
 
 .form-container {
