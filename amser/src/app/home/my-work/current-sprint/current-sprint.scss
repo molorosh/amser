@@ -4,6 +4,7 @@
   border-radius: 8px;
   padding: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  min-width: 30rem;
 
   .sprint-header {
     display: flex;
@@ -151,6 +152,39 @@
     color: var(--p-text-muted-color);
     font-size: 0.85rem;
     font-style: italic;
+  }
+
+  .days-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .day-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--p-surface-border);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .day-date {
+        color: var(--p-text-color);
+        font-size: 0.9rem;
+      }
+
+      .day-hours {
+        background: var(--p-surface-100);
+        color: var(--p-text-color);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        font-family: monospace;
+      }
+    }
   }
 }
 

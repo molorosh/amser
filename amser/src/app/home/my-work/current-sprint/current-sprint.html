@@ -12,145 +12,169 @@
     <span class="date-value">{{ sprint().endDate | date: 'EEE dd-MMM-yyyy' }}</span>
   </div>
 
-  @if (sprintTasks().length > 0) {
-    <div class="sprint-tasks">
-      @if (workItemTasks().length > 0) {
-        <div class="task-group">
-          <h4>Work Items</h4>
-          <ul class="task-list">
-            @for (sprintTask of workItemTasks(); track sprintTask.task.id) {
-              <li class="task-item">
-                <span class="task-name">
-                  @if (hasInProgressTimer(sprintTask)) {
-                    <span class="in-progress-indicator">
-                      <span class="dot"></span>
-                      <span class="dot"></span>
-                      <span class="dot"></span>
-                    </span>
+  <p-tabs value="0">
+    <p-tablist>
+      <p-tab value="0">Tasks</p-tab>
+      <p-tab value="1">Days</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        @if (sprintTasks().length > 0) {
+          <div class="sprint-tasks">
+            @if (workItemTasks().length > 0) {
+              <div class="task-group">
+                <h4>Work Items</h4>
+                <ul class="task-list">
+                  @for (sprintTask of workItemTasks(); track sprintTask.task.id) {
+                    <li class="task-item">
+                      <span class="task-name">
+                        @if (hasInProgressTimer(sprintTask)) {
+                          <span class="in-progress-indicator">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                          </span>
+                        }
+                        {{ sprintTask.task.name }}
+                      </span>
+                      <div class="task-actions">
+                        @if (sprintTask.totalHours > 0) {
+                          <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
+                        }
+                        <span class="hover-button">
+                          @if (hasInProgressTimer(sprintTask)) {
+                            <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
+                          } @else {
+                            <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
+                          }
+                        </span>
+                      </div>
+                    </li>
                   }
-                  {{ sprintTask.task.name }}
-                </span>
-                <div class="task-actions">
-                  @if (sprintTask.totalHours > 0) {
-                    <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
-                  }
-                  <span class="hover-button">
-                    @if (hasInProgressTimer(sprintTask)) {
-                      <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
-                    } @else {
-                      <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
-                    }
-                  </span>
-                </div>
-              </li>
+                </ul>
+              </div>
             }
-          </ul>
-        </div>
-      }
 
-      @if (meetingTasks().length > 0) {
-        <div class="task-group">
-          <h4>Meetings</h4>
-          <ul class="task-list">
-            @for (sprintTask of meetingTasks(); track sprintTask.task.id) {
-              <li class="task-item">
-                <span class="task-name">
-                  @if (hasInProgressTimer(sprintTask)) {
-                    <span class="in-progress-indicator">
-                      <span class="dot"></span>
-                      <span class="dot"></span>
-                      <span class="dot"></span>
-                    </span>
+            @if (meetingTasks().length > 0) {
+              <div class="task-group">
+                <h4>Meetings</h4>
+                <ul class="task-list">
+                  @for (sprintTask of meetingTasks(); track sprintTask.task.id) {
+                    <li class="task-item">
+                      <span class="task-name">
+                        @if (hasInProgressTimer(sprintTask)) {
+                          <span class="in-progress-indicator">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                          </span>
+                        }
+                        {{ sprintTask.task.name }}
+                      </span>
+                      <div class="task-actions">
+                        @if (sprintTask.totalHours > 0) {
+                          <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
+                        }
+                        <span class="hover-button">
+                          @if (hasInProgressTimer(sprintTask)) {
+                            <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
+                          } @else {
+                            <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
+                          }
+                        </span>
+                      </div>
+                    </li>
                   }
-                  {{ sprintTask.task.name }}
-                </span>
-                <div class="task-actions">
-                  @if (sprintTask.totalHours > 0) {
-                    <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
-                  }
-                  <span class="hover-button">
-                    @if (hasInProgressTimer(sprintTask)) {
-                      <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
-                    } @else {
-                      <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
-                    }
-                  </span>
-                </div>
-              </li>
+                </ul>
+              </div>
             }
-          </ul>
-        </div>
-      }
 
-      @if (peopleTasks().length > 0) {
-        <div class="task-group">
-          <h4>People</h4>
-          <ul class="task-list">
-            @for (sprintTask of peopleTasks(); track sprintTask.task.id) {
-              <li class="task-item">
-                <span class="task-name">
-                  @if (hasInProgressTimer(sprintTask)) {
-                    <span class="in-progress-indicator">
-                      <span class="dot"></span>
-                      <span class="dot"></span>
-                      <span class="dot"></span>
-                    </span>
+            @if (peopleTasks().length > 0) {
+              <div class="task-group">
+                <h4>People</h4>
+                <ul class="task-list">
+                  @for (sprintTask of peopleTasks(); track sprintTask.task.id) {
+                    <li class="task-item">
+                      <span class="task-name">
+                        @if (hasInProgressTimer(sprintTask)) {
+                          <span class="in-progress-indicator">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                          </span>
+                        }
+                        {{ sprintTask.task.name }}
+                      </span>
+                      <div class="task-actions">
+                        @if (sprintTask.totalHours > 0) {
+                          <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
+                        }
+                        <span class="hover-button">
+                          @if (hasInProgressTimer(sprintTask)) {
+                            <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
+                          } @else {
+                            <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
+                          }
+                        </span>
+                      </div>
+                    </li>
                   }
-                  {{ sprintTask.task.name }}
-                </span>
-                <div class="task-actions">
-                  @if (sprintTask.totalHours > 0) {
-                    <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
-                  }
-                  <span class="hover-button">
-                    @if (hasInProgressTimer(sprintTask)) {
-                      <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
-                    } @else {
-                      <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
-                    }
-                  </span>
-                </div>
-              </li>
+                </ul>
+              </div>
             }
-          </ul>
-        </div>
-      }
 
-      @if (otherTasks().length > 0) {
-        <div class="task-group">
-          <h4>Other</h4>
-          <ul class="task-list">
-            @for (sprintTask of otherTasks(); track sprintTask.task.id) {
-              <li class="task-item">
-                <span class="task-name">
-                  @if (hasInProgressTimer(sprintTask)) {
-                    <span class="in-progress-indicator">
-                      <span class="dot"></span>
-                      <span class="dot"></span>
-                      <span class="dot"></span>
-                    </span>
+            @if (otherTasks().length > 0) {
+              <div class="task-group">
+                <h4>Other</h4>
+                <ul class="task-list">
+                  @for (sprintTask of otherTasks(); track sprintTask.task.id) {
+                    <li class="task-item">
+                      <span class="task-name">
+                        @if (hasInProgressTimer(sprintTask)) {
+                          <span class="in-progress-indicator">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                          </span>
+                        }
+                        {{ sprintTask.task.name }}
+                      </span>
+                      <div class="task-actions">
+                        @if (sprintTask.totalHours > 0) {
+                          <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
+                        }
+                        <span class="hover-button">
+                          @if (hasInProgressTimer(sprintTask)) {
+                            <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
+                          } @else {
+                            <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
+                          }
+                        </span>
+                      </div>
+                    </li>
                   }
-                  {{ sprintTask.task.name }}
-                </span>
-                <div class="task-actions">
-                  @if (sprintTask.totalHours > 0) {
-                    <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
-                  }
-                  <span class="hover-button">
-                    @if (hasInProgressTimer(sprintTask)) {
-                      <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
-                    } @else {
-                      <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
-                    }
-                  </span>
-                </div>
+                </ul>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="no-tasks">No tasks with actions in this sprint.</p>
+        }
+      </p-tabpanel>
+      <p-tabpanel value="1">
+        @if (daysSummary().length > 0) {
+          <ul class="days-list">
+            @for (day of daysSummary(); track day.date.getTime()) {
+              <li class="day-item">
+                <span class="day-date">{{ day.date | date: 'EEE dd-MMM-yyyy' }}</span>
+                <span class="day-hours">{{ formatHoursMinutes(day.totalHours) }}</span>
               </li>
             }
           </ul>
-        </div>
-      }
-    </div>
-  } @else {
-    <p class="no-tasks">No tasks with actions in this sprint.</p>
-  }
+        } @else {
+          <p class="no-tasks">No time recorded in this sprint.</p>
+        }
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
 </div>
