@@ -13,6 +13,9 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { Task, createTask } from '../../models/task';
 import { TaskType } from '../../models/task-type';
+import { Sprint } from '../../models/sprint';
+import { Action, createAction } from '../../models/action';
+import { ActionType } from '../../models/action-type';
 import { PersistenceService } from '../../services/persistence.service';
 
 @Component({
@@ -27,8 +30,14 @@ export class TasksPage implements OnInit {
   private confirmationService = inject(ConfirmationService);
 
   tasks = signal<Task[]>([]);
+  currentSprints = signal<Sprint[]>([]);
+  actions = signal<Action[]>([]);
   dialogVisible = signal(false);
   isEditing = signal(false);
+
+  // Assign dialog
+  assignDialogVisible = signal(false);
+  taskToAssign = signal<Task | null>(null);
 
   // Filter - Task Type
   selectedFilter = signal<string>('all');
@@ -48,6 +57,29 @@ export class TasksPage implements OnInit {
     { label: 'No', value: 'no' },
   ];
 
+  // Filter - Not in Current Sprint
+  selectedSprintFilter = signal<string>('');
+  sprintFilterOptions = computed(() => {
+    const options: { label: string; value: string }[] = [
+      { label: '\u00A0', value: '' },
+    ];
+    for (const sprint of this.currentSprints()) {
+      options.push({ label: sprint.name, value: sprint.id });
+    }
+    return options;
+  });
+
+  // Task IDs that have actions in the selected sprint
+  taskIdsInSelectedSprint = computed(() => {
+    const sprintId = this.selectedSprintFilter();
+    if (!sprintId) return new Set<string>();
+    return new Set(
+      this.actions()
+        .filter(a => a.sprintId === sprintId)
+        .map(a => a.taskId)
+    );
+  });
+
   filteredTasks = computed(() => {
     let tasks = this.tasks();
     
@@ -63,6 +95,13 @@ export class TasksPage implements OnInit {
       tasks = tasks.filter(task => task.autoAllocate === true);
     } else if (autoAllocateFilter === 'no') {
       tasks = tasks.filter(task => !task.autoAllocate);
+    }
+
+    // Filter by not in current sprint
+    const sprintFilter = this.selectedSprintFilter();
+    if (sprintFilter) {
+      const taskIdsInSprint = this.taskIdsInSelectedSprint();
+      tasks = tasks.filter(task => !taskIdsInSprint.has(task.id));
     }
     
     return tasks;
@@ -86,11 +125,23 @@ export class TasksPage implements OnInit {
   async ngOnInit() {
     await this.persistence.whenReady();
     await this.loadTasks();
+    await this.loadCurrentSprints();
+    await this.loadActions();
   }
 
   async loadTasks() {
     const tasks = await this.persistence.getAllTasks();
     this.tasks.set(tasks);
+  }
+
+  async loadCurrentSprints() {
+    const sprints = await this.persistence.getAllSprints();
+    this.currentSprints.set(sprints.filter(s => s.isCurrent));
+  }
+
+  async loadActions() {
+    const actions = await this.persistence.getAllActions();
+    this.actions.set(actions);
   }
 
   openNewTaskDialog() {
@@ -159,5 +210,45 @@ export class TasksPage implements OnInit {
 
   cancelDialog() {
     this.dialogVisible.set(false);
+  }
+
+  // Assign dialog methods
+  openAssignDialog(task: Task) {
+    this.taskToAssign.set(task);
+    this.assignDialogVisible.set(true);
+  }
+
+  closeAssignDialog() {
+    this.assignDialogVisible.set(false);
+    this.taskToAssign.set(null);
+  }
+
+  async assignToSprint() {
+    const task = this.taskToAssign();
+    const sprintId = this.selectedSprintFilter();
+    if (!task || !sprintId) return;
+
+    const allocationAction = createAction(ActionType.Allocation, task.id, sprintId);
+    await this.persistence.saveAction(allocationAction);
+    
+    this.closeAssignDialog();
+    await this.loadActions();
+  }
+
+  async assignAndStart() {
+    const task = this.taskToAssign();
+    const sprintId = this.selectedSprintFilter();
+    if (!task || !sprintId) return;
+
+    // Create allocation action
+    const allocationAction = createAction(ActionType.Allocation, task.id, sprintId);
+    await this.persistence.saveAction(allocationAction);
+
+    // Create time action with current datetime as start
+    const timeAction = createAction(ActionType.Time, task.id, sprintId, new Date());
+    await this.persistence.saveAction(timeAction);
+    
+    this.closeAssignDialog();
+    await this.loadActions();
   }
 }
