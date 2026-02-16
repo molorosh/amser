@@ -4,7 +4,26 @@
     <p-button label="New Sprint" icon="pi pi-plus" (onClick)="openNewSprintDialog()" />
   </div>
 
-  <p-table [value]="sprints()" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
+  <div class="filter-section">
+    <span class="filter-label">
+      <i class="pi pi-filter"></i>
+      Sprints:
+    </span>
+    @for (option of filterOptions; track option.value) {
+      <div class="filter-option">
+        <p-radiobutton
+          [inputId]="'sprint-' + option.value"
+          name="sprintFilter"
+          [value]="option.value"
+          [ngModel]="selectedFilter()"
+          (ngModelChange)="selectedFilter.set($event)"
+        />
+        <label [for]="'sprint-' + option.value">{{ option.label }}</label>
+      </div>
+    }
+  </div>
+
+  <p-table [value]="filteredSprints()" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
     <ng-template #header>
       <tr>
         <th>Name</th>

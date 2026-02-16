@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
@@ -7,6 +7,7 @@ import { InputText } from 'primeng/inputtext';
 import { InputNumber } from 'primeng/inputnumber';
 import { DatePicker } from 'primeng/datepicker';
 import { Checkbox } from 'primeng/checkbox';
+import { RadioButton } from 'primeng/radiobutton';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
@@ -15,7 +16,7 @@ import { PersistenceService } from '../../services/persistence.service';
 
 @Component({
   selector: 'app-sprints-page',
-  imports: [FormsModule, TableModule, Button, Dialog, InputText, InputNumber, DatePicker, Checkbox, ConfirmDialog, DatePipe],
+  imports: [FormsModule, TableModule, Button, Dialog, InputText, InputNumber, DatePicker, Checkbox, RadioButton, ConfirmDialog, DatePipe],
   providers: [ConfirmationService],
   templateUrl: './sprints-page.html',
   styleUrl: './sprints-page.scss',
@@ -27,6 +28,39 @@ export class SprintsPage implements OnInit {
   sprints = signal<Sprint[]>([]);
   dialogVisible = signal(false);
   isEditing = signal(false);
+
+  // Filter
+  selectedFilter = signal<string>('all');
+  filterOptions = [
+    { label: 'Show All', value: 'all' },
+    { label: 'Past', value: 'past' },
+    { label: 'Current', value: 'current' },
+    { label: 'Future', value: 'future' },
+  ];
+  filteredSprints = computed(() => {
+    const filter = this.selectedFilter();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    switch (filter) {
+      case 'past':
+        return this.sprints().filter(sprint => {
+          const startDate = new Date(sprint.startDate);
+          startDate.setHours(0, 0, 0, 0);
+          return !sprint.isCurrent && startDate < today;
+        });
+      case 'current':
+        return this.sprints().filter(sprint => sprint.isCurrent);
+      case 'future':
+        return this.sprints().filter(sprint => {
+          const startDate = new Date(sprint.startDate);
+          startDate.setHours(0, 0, 0, 0);
+          return !sprint.isCurrent && startDate > today;
+        });
+      default:
+        return this.sprints();
+    }
+  });
 
   // Form fields
   currentSprint = signal<Sprint | null>(null);
