@@ -69,8 +69,8 @@
           }
         </td>
         <td>
-          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditTaskDialog(task)" />
-          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(task)" />
+          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditTaskDialog(task)" pTooltip="Edit Task" tooltipPosition="top" />
+          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(task)" pTooltip="Delete Task" tooltipPosition="top" />
         </td>
       </tr>
     </ng-template>

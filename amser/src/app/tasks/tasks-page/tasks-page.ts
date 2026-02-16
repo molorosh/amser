@@ -8,6 +8,7 @@ import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
 import { Checkbox } from 'primeng/checkbox';
 import { RadioButton } from 'primeng/radiobutton';
+import { Tooltip } from 'primeng/tooltip';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { Task, createTask } from '../../models/task';
@@ -16,7 +17,7 @@ import { PersistenceService } from '../../services/persistence.service';
 
 @Component({
   selector: 'app-tasks-page',
-  imports: [FormsModule, TableModule, Button, Dialog, InputText, Textarea, Select, Checkbox, RadioButton, ConfirmDialog],
+  imports: [FormsModule, TableModule, Button, Dialog, InputText, Textarea, Select, Checkbox, RadioButton, Tooltip, ConfirmDialog],
   providers: [ConfirmationService],
   templateUrl: './tasks-page.html',
   styleUrl: './tasks-page.scss',
