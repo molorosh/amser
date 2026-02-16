@@ -16,8 +16,21 @@
   .filter-section {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 1.5rem;
     margin-bottom: 1.5rem;
+
+    .filter-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: var(--p-text-color);
+
+      i {
+        color: var(--p-text-muted-color);
+      }
+    }
 
     .filter-option {
       display: flex;

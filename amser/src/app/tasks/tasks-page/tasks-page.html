@@ -5,16 +5,39 @@
   </div>
 
   <div class="filter-section">
+    <span class="filter-label">
+      <i class="pi pi-filter"></i>
+      Task Type:
+    </span>
     @for (option of filterOptions; track option.value) {
       <div class="filter-option">
         <p-radiobutton
-          [inputId]="option.value"
+          [inputId]="'type-' + option.value"
           name="taskFilter"
           [value]="option.value"
           [ngModel]="selectedFilter()"
           (ngModelChange)="selectedFilter.set($event)"
         />
-        <label [for]="option.value">{{ option.label }}</label>
+        <label [for]="'type-' + option.value">{{ option.label }}</label>
+      </div>
+    }
+  </div>
+
+  <div class="filter-section">
+    <span class="filter-label">
+      <i class="pi pi-filter"></i>
+      Auto Allocate:
+    </span>
+    @for (option of autoAllocateFilterOptions; track option.value) {
+      <div class="filter-option">
+        <p-radiobutton
+          [inputId]="'auto-' + option.value"
+          name="autoAllocateFilter"
+          [value]="option.value"
+          [ngModel]="selectedAutoAllocateFilter()"
+          (ngModelChange)="selectedAutoAllocateFilter.set($event)"
+        />
+        <label [for]="'auto-' + option.value">{{ option.label }}</label>
       </div>
     }
   </div>

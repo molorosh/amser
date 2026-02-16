@@ -29,7 +29,7 @@ export class TasksPage implements OnInit {
   dialogVisible = signal(false);
   isEditing = signal(false);
 
-  // Filter
+  // Filter - Task Type
   selectedFilter = signal<string>('all');
   filterOptions = [
     { label: 'Show All', value: 'all' },
@@ -38,12 +38,33 @@ export class TasksPage implements OnInit {
     { label: 'People', value: TaskType.People },
     { label: 'Other', value: TaskType.Other },
   ];
+
+  // Filter - Auto Allocate
+  selectedAutoAllocateFilter = signal<string>('all');
+  autoAllocateFilterOptions = [
+    { label: 'Show All', value: 'all' },
+    { label: 'Yes', value: 'yes' },
+    { label: 'No', value: 'no' },
+  ];
+
   filteredTasks = computed(() => {
-    const filter = this.selectedFilter();
-    if (filter === 'all') {
-      return this.tasks();
+    let tasks = this.tasks();
+    
+    // Filter by task type
+    const typeFilter = this.selectedFilter();
+    if (typeFilter !== 'all') {
+      tasks = tasks.filter(task => task.taskType === typeFilter);
     }
-    return this.tasks().filter(task => task.taskType === filter);
+    
+    // Filter by auto allocate
+    const autoAllocateFilter = this.selectedAutoAllocateFilter();
+    if (autoAllocateFilter === 'yes') {
+      tasks = tasks.filter(task => task.autoAllocate === true);
+    } else if (autoAllocateFilter === 'no') {
+      tasks = tasks.filter(task => !task.autoAllocate);
+    }
+    
+    return tasks;
   });
 
   // Form fields
