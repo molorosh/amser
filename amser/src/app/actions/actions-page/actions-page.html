@@ -4,7 +4,23 @@
     <p-button label="New Action" icon="pi pi-plus" (onClick)="openNewActionDialog()" />
   </div>
 
-  <p-table [value]="actions()" [tableStyle]="{ 'min-width': '60rem' }" styleClass="p-datatable-striped">
+  <div class="filter-section">
+    <span class="filter-label">
+      <i class="pi pi-filter"></i>
+      Sprint:
+    </span>
+    <p-select
+      [options]="sprintFilterOptions()"
+      [ngModel]="selectedSprintFilter()"
+      (ngModelChange)="selectedSprintFilter.set($event)"
+      optionLabel="label"
+      optionValue="value"
+      [style]="{ 'min-width': '200px' }"
+      placeholder=""
+    />
+  </div>
+
+  <p-table [value]="filteredActions()" [tableStyle]="{ 'min-width': '60rem' }" styleClass="p-datatable-striped">
     <ng-template #header>
       <tr>
         <th style="width: 40px"></th>

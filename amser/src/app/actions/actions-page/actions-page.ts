@@ -33,6 +33,53 @@ export class ActionsPage implements OnInit {
   dialogVisible = signal(false);
   isEditing = signal(false);
 
+  // Filter - Sprint
+  selectedSprintFilter = signal<string>('');
+  sprintFilterOptions = computed(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const options: { label: string; value: string }[] = [
+      { label: '\u00A0', value: '' },
+    ];
+    
+    // Filter sprints that are current or in the past
+    const eligibleSprints = this.sprints().filter(sprint => {
+      if (sprint.isCurrent) return true;
+      const startDate = new Date(sprint.startDate);
+      startDate.setHours(0, 0, 0, 0);
+      return startDate < today;
+    });
+    
+    // Separate current and past sprints
+    const currentSprints = eligibleSprints.filter(s => s.isCurrent);
+    const pastSprints = eligibleSprints.filter(s => !s.isCurrent);
+    
+    // Sort both by start date descending (most recent first)
+    const sortByStartDateDesc = (a: Sprint, b: Sprint) => 
+      new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+    
+    currentSprints.sort(sortByStartDateDesc);
+    pastSprints.sort(sortByStartDateDesc);
+    
+    // Add current sprints first, then past sprints
+    for (const sprint of currentSprints) {
+      options.push({ label: sprint.name, value: sprint.id });
+    }
+    for (const sprint of pastSprints) {
+      options.push({ label: sprint.name, value: sprint.id });
+    }
+    return options;
+  });
+
+  filteredActions = computed(() => {
+    const sprintFilter = this.selectedSprintFilter();
+    if (!sprintFilter) {
+      return this.actions();
+    }
+    return this.actions().filter(action => action.sprintId === sprintFilter);
+  });
+
   // Form fields
   currentAction = signal<Action | null>(null);
   actionType = signal<ActionType>(ActionType.Allocation);
