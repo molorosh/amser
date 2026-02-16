@@ -4,7 +4,22 @@
     <p-button label="New Task" icon="pi pi-plus" (onClick)="openNewTaskDialog()" />
   </div>
 
-  <p-table [value]="tasks()" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
+  <div class="filter-section">
+    @for (option of filterOptions; track option.value) {
+      <div class="filter-option">
+        <p-radiobutton
+          [inputId]="option.value"
+          name="taskFilter"
+          [value]="option.value"
+          [ngModel]="selectedFilter()"
+          (ngModelChange)="selectedFilter.set($event)"
+        />
+        <label [for]="option.value">{{ option.label }}</label>
+      </div>
+    }
+  </div>
+
+  <p-table [value]="filteredTasks()" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
     <ng-template #header>
       <tr>
         <th>Name</th>

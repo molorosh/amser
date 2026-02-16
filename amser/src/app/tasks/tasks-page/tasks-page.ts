@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
@@ -7,6 +7,7 @@ import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
 import { Checkbox } from 'primeng/checkbox';
+import { RadioButton } from 'primeng/radiobutton';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { Task, createTask } from '../../models/task';
@@ -15,7 +16,7 @@ import { PersistenceService } from '../../services/persistence.service';
 
 @Component({
   selector: 'app-tasks-page',
-  imports: [FormsModule, TableModule, Button, Dialog, InputText, Textarea, Select, Checkbox, ConfirmDialog],
+  imports: [FormsModule, TableModule, Button, Dialog, InputText, Textarea, Select, Checkbox, RadioButton, ConfirmDialog],
   providers: [ConfirmationService],
   templateUrl: './tasks-page.html',
   styleUrl: './tasks-page.scss',
@@ -27,6 +28,23 @@ export class TasksPage implements OnInit {
   tasks = signal<Task[]>([]);
   dialogVisible = signal(false);
   isEditing = signal(false);
+
+  // Filter
+  selectedFilter = signal<string>('all');
+  filterOptions = [
+    { label: 'Show All', value: 'all' },
+    { label: 'Work Item', value: TaskType.WorkItem },
+    { label: 'Meeting', value: TaskType.Meeting },
+    { label: 'People', value: TaskType.People },
+    { label: 'Other', value: TaskType.Other },
+  ];
+  filteredTasks = computed(() => {
+    const filter = this.selectedFilter();
+    if (filter === 'all') {
+      return this.tasks();
+    }
+    return this.tasks().filter(task => task.taskType === filter);
+  });
 
   // Form fields
   currentTask = signal<Task | null>(null);
