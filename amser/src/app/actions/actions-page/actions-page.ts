@@ -74,10 +74,14 @@ export class ActionsPage implements OnInit {
 
   filteredActions = computed(() => {
     const sprintFilter = this.selectedSprintFilter();
-    if (!sprintFilter) {
-      return this.actions();
+    let actions = this.actions();
+    if (sprintFilter) {
+      actions = actions.filter(action => action.sprintId === sprintFilter);
     }
-    return this.actions().filter(action => action.sprintId === sprintFilter);
+    // Sort by startDateTime descending (newest at top, earliest at bottom)
+    return [...actions].sort((a, b) => 
+      new Date(b.startDateTime).getTime() - new Date(a.startDateTime).getTime()
+    );
   });
 
   // Form fields
