@@ -26,7 +26,7 @@
                 <h4>Work Items</h4>
                 <ul class="task-list">
                   @for (sprintTask of workItemTasks(); track sprintTask.task.id) {
-                    <li class="task-item">
+                    <li class="task-item" [class.active]="hasInProgressTimer(sprintTask)">
                       <span class="task-name">
                         @if (hasInProgressTimer(sprintTask)) {
                           <span class="in-progress-indicator">
@@ -60,7 +60,7 @@
                 <h4>Meetings</h4>
                 <ul class="task-list">
                   @for (sprintTask of meetingTasks(); track sprintTask.task.id) {
-                    <li class="task-item">
+                    <li class="task-item" [class.active]="hasInProgressTimer(sprintTask)">
                       <span class="task-name">
                         @if (hasInProgressTimer(sprintTask)) {
                           <span class="in-progress-indicator">
@@ -94,7 +94,7 @@
                 <h4>People</h4>
                 <ul class="task-list">
                   @for (sprintTask of peopleTasks(); track sprintTask.task.id) {
-                    <li class="task-item">
+                    <li class="task-item" [class.active]="hasInProgressTimer(sprintTask)">
                       <span class="task-name">
                         @if (hasInProgressTimer(sprintTask)) {
                           <span class="in-progress-indicator">
@@ -128,7 +128,7 @@
                 <h4>Other</h4>
                 <ul class="task-list">
                   @for (sprintTask of otherTasks(); track sprintTask.task.id) {
-                    <li class="task-item">
+                    <li class="task-item" [class.active]="hasInProgressTimer(sprintTask)">
                       <span class="task-name">
                         @if (hasInProgressTimer(sprintTask)) {
                           <span class="in-progress-indicator">
