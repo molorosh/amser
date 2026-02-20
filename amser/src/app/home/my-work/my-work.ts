@@ -45,6 +45,28 @@ export class MyWork implements OnInit {
   }
 
   async onTimerStarted(event: { taskId: string; sprintId: string }) {
+    // Stop any currently running timer first
+    const inProgressAction = this.actions().find(
+      a => a.actionType === ActionType.Time && 
+           a.startDateTime && 
+           !a.endDateTime
+    );
+    
+    if (inProgressAction) {
+      const endDateTime = new Date();
+      const totalHours = calculateTotalHours(inProgressAction.startDateTime, endDateTime);
+      const stoppedAction: Action = {
+        ...inProgressAction,
+        endDateTime,
+        totalHours,
+      };
+      await this.persistence.saveAction(stoppedAction);
+      this.actions.update(actions => 
+        actions.map(a => a.id === inProgressAction.id ? stoppedAction : a)
+      );
+    }
+
+    // Start the new timer
     const newAction = createAction(ActionType.Time, event.taskId, event.sprintId);
     await this.persistence.saveAction(newAction);
     this.actions.update(actions => [...actions, newAction]);
