@@ -12,6 +12,9 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import { Sprint, createSprint, calculateMaxHours } from '../../models/sprint';
+import { Task } from '../../models/task';
+import { Action, createAction } from '../../models/action';
+import { ActionType } from '../../models/action-type';
 import { PersistenceService } from '../../services/persistence.service';
 
 @Component({
@@ -145,6 +148,19 @@ export class SprintsPage implements OnInit {
         this.sprintDaysPerSprint()
       );
       await this.persistence.saveSprint(newSprint);
+
+      // Create allocation actions for all auto-allocate tasks
+      const allTasks = await this.persistence.getAllTasks();
+      const autoAllocateTasks = allTasks.filter(task => task.autoAllocate);
+      for (const task of autoAllocateTasks) {
+        const allocationAction = createAction(
+          ActionType.Allocation,
+          task.id,
+          newSprint.id,
+          newSprint.startDate
+        );
+        await this.persistence.saveAction(allocationAction);
+      }
     }
 
     this.dialogVisible.set(false);
