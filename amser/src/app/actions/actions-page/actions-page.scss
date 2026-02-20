@@ -31,6 +31,17 @@
         color: var(--p-text-muted-color);
       }
     }
+
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      label {
+        cursor: pointer;
+        color: var(--p-text-color);
+      }
+    }
   }
 
   .empty-message {

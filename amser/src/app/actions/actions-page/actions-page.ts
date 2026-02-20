@@ -5,18 +5,20 @@ import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
+import { RadioButton } from 'primeng/radiobutton';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import { Action, createAction, calculateTotalHours } from '../../models/action';
 import { ActionType } from '../../models/action-type';
 import { Task } from '../../models/task';
+import { TaskType } from '../../models/task-type';
 import { Sprint } from '../../models/sprint';
 import { PersistenceService } from '../../services/persistence.service';
 
 @Component({
   selector: 'app-actions-page',
-  imports: [FormsModule, TableModule, Button, Dialog, Select, DatePicker, ConfirmDialog, DatePipe],
+  imports: [FormsModule, TableModule, Button, Dialog, Select, DatePicker, RadioButton, ConfirmDialog, DatePipe],
   providers: [ConfirmationService],
   templateUrl: './actions-page.html',
   styleUrl: './actions-page.scss',
@@ -35,6 +37,17 @@ export class ActionsPage implements OnInit {
 
   // Filter - Sprint
   selectedSprintFilter = signal<string>('');
+
+  // Filter - Task Type
+  selectedTaskTypeFilter = signal<string>('all');
+  taskTypeFilterOptions = [
+    { label: 'Show All', value: 'all' },
+    { label: 'Work Item', value: TaskType.WorkItem },
+    { label: 'Meeting', value: TaskType.Meeting },
+    { label: 'People', value: TaskType.People },
+    { label: 'Other', value: TaskType.Other },
+  ];
+
   sprintFilterOptions = computed(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -74,9 +87,17 @@ export class ActionsPage implements OnInit {
 
   filteredActions = computed(() => {
     const sprintFilter = this.selectedSprintFilter();
+    const taskTypeFilter = this.selectedTaskTypeFilter();
     let actions = this.actions();
     if (sprintFilter) {
       actions = actions.filter(action => action.sprintId === sprintFilter);
+    }
+    if (taskTypeFilter !== 'all') {
+      const taskMap = this.taskMap();
+      actions = actions.filter(action => {
+        const task = taskMap.get(action.taskId);
+        return task && task.taskType === taskTypeFilter;
+      });
     }
     // Sort by startDateTime descending (newest at top, earliest at bottom)
     return [...actions].sort((a, b) => 

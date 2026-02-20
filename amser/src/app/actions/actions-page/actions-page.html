@@ -7,6 +7,25 @@
   <div class="filter-section">
     <span class="filter-label">
       <i class="pi pi-filter"></i>
+      Task Type:
+    </span>
+    @for (option of taskTypeFilterOptions; track option.value) {
+      <div class="filter-option">
+        <p-radiobutton
+          [inputId]="'tasktype-' + option.value"
+          name="taskTypeFilter"
+          [value]="option.value"
+          [ngModel]="selectedTaskTypeFilter()"
+          (ngModelChange)="selectedTaskTypeFilter.set($event)"
+        />
+        <label [for]="'tasktype-' + option.value">{{ option.label }}</label>
+      </div>
+    }
+  </div>
+
+  <div class="filter-section">
+    <span class="filter-label">
+      <i class="pi pi-filter"></i>
       Sprint:
     </span>
     <p-select
