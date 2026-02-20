@@ -2,12 +2,14 @@ import { Injectable, signal } from '@angular/core';
 import { Task } from '../models/task';
 import { Sprint } from '../models/sprint';
 import { Action } from '../models/action';
+import { Setting } from '../models/setting';
 
 const DB_NAME = 'amser-db';
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 const TASKS_STORE = 'tasks';
 const SPRINTS_STORE = 'sprints';
 const ACTIONS_STORE = 'actions';
+const SETTINGS_STORE = 'settings';
 
 @Injectable({
   providedIn: 'root',
@@ -63,6 +65,10 @@ export class PersistenceService {
           store.createIndex('sprintId', 'sprintId', { unique: false });
           store.createIndex('actionType', 'actionType', { unique: false });
           store.createIndex('startDateTime', 'startDateTime', { unique: false });
+        }
+
+        if (!db.objectStoreNames.contains(SETTINGS_STORE)) {
+          db.createObjectStore(SETTINGS_STORE, { keyPath: 'settingName' });
         }
       };
     });
@@ -338,6 +344,67 @@ export class PersistenceService {
       try {
         const store = this.getStore(ACTIONS_STORE, 'readwrite');
         const request = store.clear();
+
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  // Settings methods
+  async getSetting(settingName: string): Promise<Setting | undefined> {
+    return new Promise((resolve, reject) => {
+      try {
+        const store = this.getStore(SETTINGS_STORE, 'readonly');
+        const request = store.get(settingName);
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async saveSetting(setting: Setting): Promise<Setting> {
+    return new Promise((resolve, reject) => {
+      try {
+        if (!setting.settingName || setting.settingName.trim() === '') {
+          reject(new Error('Setting name cannot be null or empty'));
+          return;
+        }
+        const store = this.getStore(SETTINGS_STORE, 'readwrite');
+        const request = store.put(setting);
+
+        request.onsuccess = () => resolve(setting);
+        request.onerror = () => reject(request.error);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async getAllSettings(): Promise<Setting[]> {
+    return new Promise((resolve, reject) => {
+      try {
+        const store = this.getStore(SETTINGS_STORE, 'readonly');
+        const request = store.getAll();
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async deleteSetting(settingName: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      try {
+        const store = this.getStore(SETTINGS_STORE, 'readwrite');
+        const request = store.delete(settingName);
 
         request.onsuccess = () => resolve();
         request.onerror = () => reject(request.error);

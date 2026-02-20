@@ -1,23 +1,34 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { PersistenceService } from './persistence.service';
+import { createSetting } from '../models/setting';
+
+const DARK_MODE_SETTING = 'DarkModeEnabled';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeService {
-  private readonly DARK_MODE_KEY = 'amser-dark-mode';
+  private persistence = inject(PersistenceService);
   
-  darkMode = signal(this.loadDarkMode());
+  darkMode = signal(false);
 
-  private loadDarkMode(): boolean {
-    const stored = localStorage.getItem(this.DARK_MODE_KEY);
-    const isDark = stored === 'true';
-    this.applyTheme(isDark);
-    return isDark;
+  constructor() {
+    this.initializeDarkMode();
   }
 
-  toggleDarkMode(enabled: boolean) {
+  private async initializeDarkMode() {
+    await this.persistence.whenReady();
+    const setting = await this.persistence.getSetting(DARK_MODE_SETTING);
+    const isDark = setting?.settingValue === 'true';
+    this.darkMode.set(isDark);
+    this.applyTheme(isDark);
+  }
+
+  async toggleDarkMode(enabled: boolean) {
     this.darkMode.set(enabled);
-    localStorage.setItem(this.DARK_MODE_KEY, String(enabled));
+    await this.persistence.saveSetting(
+      createSetting(DARK_MODE_SETTING, String(enabled))
+    );
     this.applyTheme(enabled);
   }
 
