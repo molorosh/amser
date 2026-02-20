@@ -1,12 +1,435 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'primeicons/primeicons.css';
 
-html, body {
+html {
+  height: 100%;
+}
+
+body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
+  min-height: 100%;
+  background-color: var(--p-surface-ground);
+  color: var(--p-text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  /* Light mode defaults (fallback) */
+  --p-surface-ground: #ffffff;
+  --p-surface-section: #f8f9fa;
+  --p-surface-card: #ffffff;
+  --p-surface-overlay: #ffffff;
+  --p-surface-border: #dee2e6;
+  --p-surface-100: #f8f9fa;
+  --p-surface-200: #e9ecef;
+  --p-surface-300: #dee2e6;
+  --p-surface-400: #ced4da;
+  --p-surface-500: #adb5bd;
+  --p-text-color: #212529;
+  --p-text-muted-color: #6c757d;
+  --p-primary-contrast-color: #ffffff;
+  --p-shadow-color: rgba(0, 0, 0, 0.1);
+  --p-highlight-bg: rgba(59, 130, 246, 0.1);
 }
 
 * {
   font-family: inherit;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  --p-surface-ground: #121212;
+  --p-surface-section: #1e1e1e;
+  --p-surface-card: #1e1e1e;
+  --p-surface-overlay: #2a2a2a;
+  --p-surface-border: #404040;
+  --p-surface-100: #2a2a2a;
+  --p-surface-200: #333333;
+  --p-surface-300: #404040;
+  --p-surface-400: #525252;
+  --p-surface-500: #6b6b6b;
+  --p-text-color: #ffffff;
+  --p-text-muted-color: #a0a0a0;
+  --p-primary-contrast-color: #000000;
+  --p-shadow-color: rgba(0, 0, 0, 0.3);
+  --p-highlight-bg: rgba(59, 130, 246, 0.2);
+  
+  background-color: #121212;
+  color: #ffffff;
+
+  /* PrimeNG Table Overrides */
+  .p-datatable {
+    background: #1e1e1e !important;
+    color: #ffffff !important;
+
+    .p-datatable-thead > tr > th {
+      background: #2a2a2a !important;
+      color: #ffffff !important;
+      border-color: #404040 !important;
+    }
+
+    .p-datatable-tbody > tr {
+      background: #1e1e1e !important;
+      color: #ffffff !important;
+      border-color: #404040 !important;
+
+      &:nth-child(even) {
+        background: #252525 !important;
+      }
+
+      &:hover {
+        background: #333333 !important;
+      }
+
+      > td {
+        border-color: #404040 !important;
+        color: #ffffff !important;
+        background: inherit !important;
+      }
+    }
+
+    .p-datatable-tfoot > tr > td {
+      background: #2a2a2a !important;
+      color: #ffffff !important;
+      border-color: #404040 !important;
+    }
+
+    .p-datatable-table {
+      background: #1e1e1e !important;
+    }
+  }
+
+  /* PrimeNG Striped Table */
+  .p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
+    background: #252525 !important;
+  }
+
+  .p-datatable-striped .p-datatable-tbody > tr:nth-child(even) > td {
+    background: #252525 !important;
+  }
+
+  .p-datatable-striped .p-datatable-tbody > tr:nth-child(odd) {
+    background: #1e1e1e !important;
+  }
+
+  .p-datatable-striped .p-datatable-tbody > tr:nth-child(odd) > td {
+    background: #1e1e1e !important;
+  }
+
+  /* PrimeNG Dialog */
+  .p-dialog {
+    background: #1e1e1e;
+    color: #ffffff;
+    border: 1px solid #404040;
+
+    .p-dialog-header {
+      background: #2a2a2a;
+      color: #ffffff;
+      border-bottom: 1px solid #404040;
+    }
+
+    .p-dialog-content {
+      background: #1e1e1e;
+      color: #ffffff;
+    }
+
+    .p-dialog-footer {
+      background: #1e1e1e;
+      border-top: 1px solid #404040;
+    }
+  }
+
+  /* PrimeNG Inputs */
+  .p-inputtext,
+  .p-textarea,
+  .p-select,
+  .p-datepicker,
+  .p-inputnumber-input {
+    background: #2a2a2a;
+    color: #ffffff;
+    border-color: #404040;
+
+    &:focus,
+    &:hover {
+      border-color: #525252;
+    }
+  }
+
+  /* PrimeNG Select/Dropdown */
+  .p-select {
+    .p-select-label {
+      color: #ffffff !important;
+    }
+
+    .p-select-dropdown {
+      color: #ffffff !important;
+    }
+  }
+
+  .p-select-overlay,
+  .p-select-panel {
+    background: #2a2a2a !important;
+    color: #ffffff !important;
+    border-color: #404040;
+
+    .p-select-item {
+      color: #ffffff !important;
+
+      &:hover {
+        background: #333333;
+        color: #ffffff !important;
+      }
+
+      &.p-highlight {
+        background: #404040;
+        color: #ffffff !important;
+      }
+    }
+
+    .p-select-item-label {
+      color: #ffffff !important;
+    }
+
+    .p-select-list {
+      color: #ffffff !important;
+    }
+
+    * {
+      color: #ffffff !important;
+    }
+  }
+
+  /* PrimeNG DatePicker */
+  .p-datepicker-panel {
+    background: #2a2a2a;
+    color: #ffffff;
+    border-color: #404040;
+
+    .p-datepicker-header {
+      background: #2a2a2a;
+      color: #ffffff;
+    }
+
+    .p-datepicker-calendar td > span {
+      color: #ffffff;
+
+      &:hover {
+        background: #404040;
+      }
+    }
+
+    .p-datepicker-today > span {
+      background: #333333;
+    }
+  }
+
+  /* PrimeNG Tabs */
+  .p-tabs {
+    background: #1e1e1e !important;
+
+    .p-tablist {
+      background: #1e1e1e !important;
+      border-color: #404040 !important;
+    }
+
+    .p-tablist-content {
+      background: #1e1e1e !important;
+    }
+
+    .p-tab {
+      color: #a0a0a0 !important;
+      background: transparent !important;
+
+      &:hover {
+        color: #ffffff !important;
+        background: #2a2a2a !important;
+      }
+
+      &[data-p-active="true"],
+      &.p-tab-active {
+        color: #ffffff !important;
+        border-color: var(--p-primary-color) !important;
+        background: transparent !important;
+      }
+    }
+
+    .p-tabpanels {
+      background: #1e1e1e !important;
+      color: #ffffff !important;
+    }
+
+    .p-tabpanel {
+      background: #1e1e1e !important;
+      color: #ffffff !important;
+    }
+  }
+
+  p-tabs,
+  p-tablist,
+  p-tabpanels,
+  p-tabpanel {
+    background: #1e1e1e !important;
+    color: #ffffff !important;
+  }
+
+  /* PrimeNG Checkbox */
+  .p-checkbox-box {
+    background: #2a2a2a;
+    border-color: #404040;
+  }
+
+  /* PrimeNG Radio Button */
+  .p-radiobutton-box {
+    background: #2a2a2a;
+    border-color: #404040;
+  }
+
+  /* PrimeNG Toggle Switch */
+  .p-toggleswitch-slider {
+    background: #404040;
+  }
+
+  /* PrimeNG Confirm Dialog */
+  .p-confirmdialog {
+    background: #1e1e1e;
+    color: #ffffff;
+  }
+
+  /* PrimeNG Button - secondary/text styles */
+  .p-button-text {
+    color: #ffffff;
+  }
+
+  /* Lists */
+  ul, ol {
+    color: #ffffff;
+  }
+
+  /* Links */
+  a {
+    color: var(--p-primary-color);
+  }
+
+  /* Current Sprint Component */
+  .current-sprint-card {
+    background: #1e1e1e !important;
+    border-color: #404040 !important;
+
+    .sprint-name {
+      color: #ffffff !important;
+    }
+
+    .date-label {
+      color: #a0a0a0 !important;
+    }
+
+    .date-value {
+      color: #ffffff !important;
+    }
+
+    h4 {
+      color: #a0a0a0 !important;
+    }
+
+    .task-name {
+      color: #ffffff !important;
+    }
+
+    .task-hours,
+    .day-hours {
+      background: #2a2a2a !important;
+      color: #ffffff !important;
+    }
+
+    .day-date {
+      color: #ffffff !important;
+    }
+
+    .task-item {
+      border-color: #404040 !important;
+    }
+
+    .no-tasks {
+      color: #a0a0a0 !important;
+      border-color: #404040 !important;
+    }
+
+    .sprint-tasks {
+      border-color: #404040 !important;
+      background: #1e1e1e !important;
+    }
+
+    .day-item {
+      border-color: #404040 !important;
+    }
+
+    .days-list {
+      background: #1e1e1e !important;
+    }
+
+    .task-list {
+      background: #1e1e1e !important;
+    }
+
+    .task-group {
+      background: #1e1e1e !important;
+    }
+  }
+
+  /* My Work Component */
+  .my-work-container {
+    background: #121212 !important;
+
+    h2 {
+      color: #ffffff !important;
+    }
+
+    .display-toggle {
+      color: #a0a0a0 !important;
+
+      span.active {
+        color: var(--p-primary-color) !important;
+      }
+    }
+
+    .no-sprints {
+      color: #a0a0a0 !important;
+    }
+
+    .sprints-grid {
+      background: #121212 !important;
+    }
+  }
+
+  /* Home Container */
+  .home-container {
+    background: #121212 !important;
+    
+    h1 {
+      color: #ffffff !important;
+    }
+  }
+
+  /* All page containers */
+  .tasks-container,
+  .sprints-container,
+  .actions-container,
+  .about-container,
+  .genz-settings-container {
+    background: #121212 !important;
+  }
+
+  /* Generic text overrides */
+  p, span, div, li {
+    color: inherit;
+  }
+
+  /* Ensure all content areas have dark bg */
+  [class*="-container"] {
+    background: #121212 !important;
+  }
+
+  [class*="-card"] {
+    background: #1e1e1e !important;
+  }
 }

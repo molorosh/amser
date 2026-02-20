@@ -1,0 +1,39 @@
+.genz-settings-container {
+  padding: 2rem;
+  max-width: 600px;
+
+  h1 {
+    margin: 0 0 2rem 0;
+    color: var(--p-text-color);
+  }
+
+  .settings-section {
+    background: var(--p-surface-card);
+    border: 1px solid var(--p-surface-border);
+    border-radius: 8px;
+    padding: 1rem;
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+
+      .setting-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .setting-label {
+          font-weight: 600;
+          color: var(--p-text-color);
+        }
+
+        .setting-description {
+          font-size: 0.875rem;
+          color: var(--p-text-muted-color);
+        }
+      }
+    }
+  }
+}

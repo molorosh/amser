@@ -1,0 +1,16 @@
+<div class="genz-settings-container">
+  <h1>GenZ Settings</h1>
+
+  <div class="settings-section">
+    <div class="setting-item">
+      <div class="setting-info">
+        <span class="setting-label">Dark Mode</span>
+        <span class="setting-description">Switch to a white-on-black style</span>
+      </div>
+      <p-toggleswitch
+        [ngModel]="darkMode()"
+        (ngModelChange)="onDarkModeChange($event)"
+      />
+    </div>
+  </div>
+</div>
