@@ -9,14 +9,23 @@ const DARK_MODE_SETTING = 'DarkModeEnabled';
 })
 export class ThemeService {
   private persistence = inject(PersistenceService);
+  private initPromise: Promise<void>;
   
   darkMode = signal(false);
 
   constructor() {
-    this.initializeDarkMode();
+    this.initPromise = this.initializeDarkMode();
   }
 
-  private async initializeDarkMode() {
+  /**
+   * Returns a promise that resolves when the theme has been loaded from settings.
+   * Use this in APP_INITIALIZER to ensure theme is applied before app renders.
+   */
+  whenReady(): Promise<void> {
+    return this.initPromise;
+  }
+
+  private async initializeDarkMode(): Promise<void> {
     await this.persistence.whenReady();
     const setting = await this.persistence.getSetting(DARK_MODE_SETTING);
     const isDark = setting?.settingValue === 'true';
