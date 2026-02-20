@@ -45,24 +45,32 @@ export class SprintsPage implements OnInit {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
+    let result: Sprint[];
     switch (filter) {
       case 'past':
-        return this.sprints().filter(sprint => {
+        result = this.sprints().filter(sprint => {
           const startDate = new Date(sprint.startDate);
           startDate.setHours(0, 0, 0, 0);
           return !sprint.isCurrent && startDate < today;
         });
+        break;
       case 'current':
-        return this.sprints().filter(sprint => sprint.isCurrent);
+        result = this.sprints().filter(sprint => sprint.isCurrent);
+        break;
       case 'future':
-        return this.sprints().filter(sprint => {
+        result = this.sprints().filter(sprint => {
           const startDate = new Date(sprint.startDate);
           startDate.setHours(0, 0, 0, 0);
           return !sprint.isCurrent && startDate > today;
         });
+        break;
       default:
-        return this.sprints();
+        result = this.sprints();
     }
+    
+    return result.slice().sort((a, b) => 
+      new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+    );
   });
 
   // Form fields
