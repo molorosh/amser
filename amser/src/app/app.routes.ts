@@ -31,4 +31,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./genz-settings/genz-settings-page/genz-settings-page').then((m) => m.GenzSettingsPage),
   },
+  {
+    path: 'data',
+    loadComponent: () =>
+      import('./data/data-page/data-page').then((m) => m.DataPage),
+  },
 ];
