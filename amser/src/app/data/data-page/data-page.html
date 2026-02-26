@@ -3,6 +3,57 @@
   <p class="description">Manage your data here.</p>
 
   <div class="actions">
-    <button class="export-btn" (click)="exportData()">Export Data</button>
+    <button class="action-btn" (click)="exportData()">Export Data</button>
+    <button class="action-btn" (click)="triggerFileInput()">Import Data</button>
+    <input
+      type="file"
+      id="importFileInput"
+      accept=".json"
+      (change)="onFileSelected($event)"
+      style="display: none;"
+    />
   </div>
+
+  @if (importError()) {
+    <div class="error-message">
+      {{ importError() }}
+    </div>
+  }
+
+  @if (importSummary(); as summary) {
+    <div class="import-summary">
+      <h2>Import Complete</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Entity Type</th>
+            <th>Added</th>
+            <th>Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tasks</td>
+            <td>{{ summary.tasksAdded }}</td>
+            <td>{{ summary.tasksUpdated }}</td>
+          </tr>
+          <tr>
+            <td>Sprints</td>
+            <td>{{ summary.sprintsAdded }}</td>
+            <td>{{ summary.sprintsUpdated }}</td>
+          </tr>
+          <tr>
+            <td>Actions</td>
+            <td>{{ summary.actionsAdded }}</td>
+            <td>{{ summary.actionsUpdated }}</td>
+          </tr>
+          <tr>
+            <td>Settings</td>
+            <td>{{ summary.settingsAdded }}</td>
+            <td>{{ summary.settingsUpdated }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  }
 </div>
