@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "build:gh-pages": "ng build --configuration=github-pages",
+    "postbuild:gh-pages": "node scripts/move-browser-files.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
