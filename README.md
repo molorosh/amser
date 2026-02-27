@@ -12,3 +12,6 @@ Amser (Welsh for "time") is a lightweight time tracking application designed to 
 
 ## Why Amser?
 Time is our most valuable resource, yet it's often difficult to account for where it goes. Amser was built with simplicity in mind — no complex setup, no overwhelming features, just a straightforward way to track your time and gain insights into your work habits.
+
+## The Code
+As of February 2026, every single line of Amser was Vibe-Coded! (apart from the last section of the About page)
