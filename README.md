@@ -1,52 +1,14 @@
-# Introduction 
-Time Tracking Software implemented in Angular v21 
+# Amser
+Your personal time tracking companion.
 
-# Initial Setup and ng21 local install
+Amser (Welsh for "time") is a lightweight time tracking application designed to help you understand where your time goes during work sprints. Whether you're managing development tasks, attending meetings, or collaborating with colleagues, Amser provides a simple way to track and visualize your time investment.
 
-open a terminal and navigate to your source folder
-```
-~>cd source\repos
-```
-now clone the repo
-```
-~\source\repos> git clone https://HRicketts@dev.azure.com/HRicketts/Training%20Day/_git/tracker
-```
-```
-~\source\repos> cd tracker
-```
-check the angular version installed globally
-```
-~\source\repos\tracker> ng --version 
-```
-19.1.2, opps! not the version I want 
+## Key Features
+- **Sprint-based tracking** — Organize your work into sprints with defined start and end dates, making it easy to plan and review your time allocation.
+- **Task categorization** — Group your activities into Work Items, Meetings, People, and Other categories for better insights into how you spend your day.
+- **One-click timers** — Start and stop timers with a single click, minimizing friction so you can focus on the work that matters.
+- **Daily summaries** — View your time logged by day to identify patterns and optimize your productivity.
+- **Local storage** — Your data stays on your device, ensuring privacy and instant access without network dependencies.
 
-opps the wrong version
-
-~\source\repos\tracker> npm install @angular/cli@21 --save-dev
-
-also create a .gitignore file that just contains a single line:
-```
-/node_modules
-```
-check the local version
-```
-~\source\repos\tracker> ng --version 
-```
-21.1.12
-
-yay! now we are ready to go.  We're using npx instead of npm so that we use the local version of Angular.
-
-```
-~\source\repos\tracker> npx ng new amser
-```
-
-The settings I chose for new project creation were:
-- Which stylesheet format would you like to use? `Sass(SCSS)` 
-- Do you want to enable Server-Side Rendering (SSR) and Static Site Generation (SSG/Prerendering)? `No`
-- Which AI tools do you want to use?: `GitHub Copilot`
-
-Note: Amser is the welsh word for "time".
-
-
-
-
+## Why Amser?
+Time is our most valuable resource, yet it's often difficult to account for where it goes. Amser was built with simplicity in mind — no complex setup, no overwhelming features, just a straightforward way to track your time and gain insights into your work habits.
