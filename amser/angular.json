@@ -54,6 +54,20 @@
               ],
               "outputHashing": "all"
             },
+            "github-pages": {
+              "outputPath": "../docs",
+              "baseHref": "/amser/",
+              "deployUrl": "/amser/",
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError": "1MB"
+                }
+              ],
+              "outputHashing": "all",
+              "optimization": true
+            },
             "development": {
               "optimization": false,
               "extractLicenses": false,
