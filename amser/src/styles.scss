@@ -223,6 +223,12 @@ body.dark-mode {
     }
   }
 
+  /* PrimeNG InputNumber */
+  .p-inputnumber-input {
+    color: #ffffff !important;
+    background: #2a2a2a !important;
+  }
+
   /* PrimeNG Tabs */
   .p-tabs {
     background: #1e1e1e !important;
@@ -431,5 +437,23 @@ body.dark-mode {
 
   [class*="-card"] {
     background: #1e1e1e !important;
+  }
+}
+
+/* PrimeNG InputNumber - Global styling for both modes */
+.p-inputnumber-input,
+.p-inputnumber input,
+p-inputnumber input,
+.p-inputtext {
+  color: var(--p-text-color) !important;
+}
+
+body.dark-mode {
+  .p-inputnumber-input,
+  .p-inputnumber input,
+  p-inputnumber input,
+  .p-inputtext {
+    color: #ffffff !important;
+    background: #2a2a2a !important;
   }
 }

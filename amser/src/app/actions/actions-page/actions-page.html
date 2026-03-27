@@ -149,12 +149,32 @@
         data-testid="dlg_action_startdatetime_picker"
         id="startDateTime"
         [ngModel]="actionStartDateTime()"
-        (ngModelChange)="actionStartDateTime.set($event)"
-        [showTime]="true"
+        (ngModelChange)="onStartDateChange($event)"
         dateFormat="dd/mm/yy"
         [appendTo]="'body'"
         styleClass="w-full"
       />
+      <div class="time-inputs">
+        <p-inputNumber
+          data-testid="dlg_action_start_hours"
+          [ngModel]="startHours()"
+          (ngModelChange)="onStartHoursChange($event)"
+          [min]="0"
+          [max]="23"
+          [showButtons]="true"
+          [inputStyle]="{ width: '6rem', textAlign: 'center', color: 'inherit' }"
+        />
+        <span class="time-separator">:</span>
+        <p-inputNumber
+          data-testid="dlg_action_start_minutes"
+          [ngModel]="startMinutes()"
+          (ngModelChange)="onStartMinutesChange($event)"
+          [min]="0"
+          [max]="59"
+          [showButtons]="true"
+          [inputStyle]="{ width: '6rem', textAlign: 'center', color: 'inherit' }"
+        />
+      </div>
       @if (actionStartDateTime() && !isDateValid(actionStartDateTime())) {
         <small class="p-error" style="color: red">Date must be between Jan 28, 1813 and Feb 02, 2222</small>
       }
@@ -169,12 +189,34 @@
         data-testid="dlg_action_enddatetime_picker"
         id="endDateTime"
         [ngModel]="actionEndDateTime()"
-        (ngModelChange)="actionEndDateTime.set($event)"
-        [showTime]="true"
+        (ngModelChange)="onEndDateChange($event)"
         dateFormat="dd/mm/yy"
         [appendTo]="'body'"
         styleClass="w-full"
       />
+      <div class="time-inputs">
+        <p-inputNumber
+          data-testid="dlg_action_end_hours"
+          [ngModel]="endHours()"
+          (ngModelChange)="onEndHoursChange($event)"
+          [min]="0"
+          [max]="23"
+          [showButtons]="true"
+          [disabled]="!actionEndDateTime()"
+          [inputStyle]="{ width: '6rem', textAlign: 'center', color: 'inherit' }"
+        />
+        <span class="time-separator">:</span>
+        <p-inputNumber
+          data-testid="dlg_action_end_minutes"
+          [ngModel]="endMinutes()"
+          (ngModelChange)="onEndMinutesChange($event)"
+          [min]="0"
+          [max]="59"
+          [showButtons]="true"
+          [disabled]="!actionEndDateTime()"
+          [inputStyle]="{ width: '6rem', textAlign: 'center', color: 'inherit' }"
+        />
+      </div>
       @if (actionEndDateTime() && !isDateValid(actionEndDateTime())) {
         <small class="p-error" style="color: red">Date must be between Jan 28, 1813 and Feb 02, 2222</small>
       }
