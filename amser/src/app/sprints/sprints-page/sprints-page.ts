@@ -12,6 +12,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import { Sprint, createSprint, calculateMaxHours } from '../../models/sprint';
+import { isDateInValidRange } from '../../shared/date-constraints';
 import { Task } from '../../models/task';
 import { Action, createAction } from '../../models/action';
 import { ActionType } from '../../models/action-type';
@@ -120,11 +121,19 @@ export class SprintsPage implements OnInit {
     this.dialogVisible.set(true);
   }
 
+  isDateValid(date: Date | null): boolean {
+    return date ? isDateInValidRange(date) : true;
+  }
+
   isFormValid(): boolean {
+    const startDate = this.sprintStartDate();
+    const endDate = this.sprintEndDate();
     return !!(
       this.sprintName().trim() &&
-      this.sprintStartDate() &&
-      this.sprintEndDate() &&
+      startDate &&
+      endDate &&
+      isDateInValidRange(startDate) &&
+      isDateInValidRange(endDate) &&
       this.sprintHoursPerDay() > 0 &&
       this.sprintDaysPerSprint() > 0
     );

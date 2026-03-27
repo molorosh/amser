@@ -10,6 +10,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import { Action, createAction, calculateTotalHours } from '../../models/action';
+import { isDateInValidRange } from '../../shared/date-constraints';
 import { ActionType } from '../../models/action-type';
 import { Task } from '../../models/task';
 import { TaskType } from '../../models/task-type';
@@ -178,11 +179,19 @@ export class ActionsPage implements OnInit {
     this.dialogVisible.set(true);
   }
 
+  isDateValid(date: Date | null): boolean {
+    return date ? isDateInValidRange(date) : true;
+  }
+
   isFormValid(): boolean {
+    const startDateTime = this.actionStartDateTime();
+    const endDateTime = this.actionEndDateTime();
     return !!(
       this.actionTaskId() &&
       this.actionSprintId() &&
-      this.actionStartDateTime()
+      startDateTime &&
+      isDateInValidRange(startDateTime) &&
+      (!endDateTime || isDateInValidRange(endDateTime))
     );
   }
 

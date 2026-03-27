@@ -147,6 +147,9 @@
         dateFormat="dd/mm/yy"
         styleClass="w-full"
       />
+      @if (actionStartDateTime() && !isDateValid(actionStartDateTime())) {
+        <small class="p-error" style="color: red">Date must be between Jan 28, 1813 and Feb 02, 2222</small>
+      }
     </div>
 
     <div class="field">
@@ -159,6 +162,9 @@
         dateFormat="dd/mm/yy"
         styleClass="w-full"
       />
+      @if (actionEndDateTime() && !isDateValid(actionEndDateTime())) {
+        <small class="p-error" style="color: red">Date must be between Jan 28, 1813 and Feb 02, 2222</small>
+      }
     </div>
   </div>
 
