@@ -90,6 +90,8 @@ export class ActionsPage implements OnInit {
     const sprintFilter = this.selectedSprintFilter();
     const taskTypeFilter = this.selectedTaskTypeFilter();
     let actions = this.actions();
+    // Exclude Allocation records from "Show All"
+    actions = actions.filter(action => action.actionType !== ActionType.Allocation);
     if (sprintFilter) {
       actions = actions.filter(action => action.sprintId === sprintFilter);
     }

@@ -49,6 +49,11 @@
                           <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
                         }
                         <span class="hover-button">
+                          @if (hasOnlyAllocation(sprintTask)) {
+                            <span class="remove-btn">
+                              <p-button label="Remove" size="small" (onClick)="onRemoveAllocation(sprintTask)" />
+                            </span>
+                          }
                           @if (hasInProgressTimer(sprintTask)) {
                             <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
                           } @else {
@@ -90,6 +95,11 @@
                           <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
                         }
                         <span class="hover-button">
+                          @if (hasOnlyAllocation(sprintTask)) {
+                            <span class="remove-btn">
+                              <p-button label="Remove" size="small" (onClick)="onRemoveAllocation(sprintTask)" />
+                            </span>
+                          }
                           @if (hasInProgressTimer(sprintTask)) {
                             <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
                           } @else {
@@ -131,6 +141,11 @@
                           <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
                         }
                         <span class="hover-button">
+                          @if (hasOnlyAllocation(sprintTask)) {
+                            <span class="remove-btn">
+                              <p-button label="Remove" size="small" (onClick)="onRemoveAllocation(sprintTask)" />
+                            </span>
+                          }
                           @if (hasInProgressTimer(sprintTask)) {
                             <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
                           } @else {
@@ -172,6 +187,11 @@
                           <span class="task-hours">{{ formatTime(sprintTask.totalHours) }}</span>
                         }
                         <span class="hover-button">
+                          @if (hasOnlyAllocation(sprintTask)) {
+                            <span class="remove-btn">
+                              <p-button label="Remove" size="small" (onClick)="onRemoveAllocation(sprintTask)" />
+                            </span>
+                          }
                           @if (hasInProgressTimer(sprintTask)) {
                             <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
                           } @else {
@@ -206,3 +226,5 @@
     </p-tabpanels>
   </p-tabs>
 </div>
+
+<p-confirmDialog />

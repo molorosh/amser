@@ -17,7 +17,8 @@
           [actions]="actions()" 
           [displayMode]="displayMode()"
           (timerStarted)="onTimerStarted($event)"
-          (timerStopped)="onTimerStopped($event)" />
+          (timerStopped)="onTimerStopped($event)"
+          (allocationRemoved)="onAllocationRemoved($event)" />
       }
     </div>
   } @else {
