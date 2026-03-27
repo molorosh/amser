@@ -94,6 +94,10 @@ export class CurrentSprint {
     return `${totalHours.toFixed(1)}h`;
   }
 
+  hasDescription(task: Task): boolean {
+    return !!task.description && task.description.trim().length > 0;
+  }
+
   hasInProgressTimer(sprintTask: SprintTask): boolean {
     return sprintTask.actions.some(
       action => action.actionType === ActionType.Time && 

@@ -40,6 +40,9 @@
                         } @else {
                           {{ sprintTask.task.name }}
                         }
+                        @if (hasDescription(sprintTask.task)) {
+                          <span class="description-indicator" [attr.data-tooltip]="sprintTask.task.description">💬</span>
+                        }
                       </span>
                       <div class="task-actions">
                         @if (sprintTask.totalHours > 0) {
@@ -77,6 +80,9 @@
                           <a [href]="sprintTask.task.url" target="_blank" rel="noopener noreferrer">{{ sprintTask.task.name }}</a>
                         } @else {
                           {{ sprintTask.task.name }}
+                        }
+                        @if (hasDescription(sprintTask.task)) {
+                          <span class="description-indicator" [attr.data-tooltip]="sprintTask.task.description">💬</span>
                         }
                       </span>
                       <div class="task-actions">
@@ -116,6 +122,9 @@
                         } @else {
                           {{ sprintTask.task.name }}
                         }
+                        @if (hasDescription(sprintTask.task)) {
+                          <span class="description-indicator" [attr.data-tooltip]="sprintTask.task.description">💬</span>
+                        }
                       </span>
                       <div class="task-actions">
                         @if (sprintTask.totalHours > 0) {
@@ -153,6 +162,9 @@
                           <a [href]="sprintTask.task.url" target="_blank" rel="noopener noreferrer">{{ sprintTask.task.name }}</a>
                         } @else {
                           {{ sprintTask.task.name }}
+                        }
+                        @if (hasDescription(sprintTask.task)) {
+                          <span class="description-indicator" [attr.data-tooltip]="sprintTask.task.description">💬</span>
                         }
                       </span>
                       <div class="task-actions">
