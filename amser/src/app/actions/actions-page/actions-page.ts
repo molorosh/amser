@@ -185,16 +185,43 @@ export class ActionsPage implements OnInit {
     return date ? isDateInValidRange(date) : true;
   }
 
+  getSelectedSprint(): Sprint | undefined {
+    return this.sprintMap().get(this.actionSprintId());
+  }
+
+  isDateWithinSprintRange(date: Date | null): boolean {
+    if (!date) return true;
+    const sprint = this.getSelectedSprint();
+    if (!sprint) return true;
+    
+    const sprintStart = new Date(sprint.startDate);
+    sprintStart.setHours(0, 0, 0, 0);
+    const sprintEnd = new Date(sprint.endDate);
+    sprintEnd.setHours(23, 59, 59, 999);
+    
+    return date >= sprintStart && date <= sprintEnd;
+  }
+
   isFormValid(): boolean {
     const startDateTime = this.actionStartDateTime();
     const endDateTime = this.actionEndDateTime();
-    return !!(
+    const actionType = this.actionType();
+    
+    const basicValid = !!(
       this.actionTaskId() &&
       this.actionSprintId() &&
       startDateTime &&
       isDateInValidRange(startDateTime) &&
       (!endDateTime || isDateInValidRange(endDateTime))
     );
+    
+    // For Time actions, also validate dates are within sprint range
+    if (basicValid && actionType === ActionType.Time) {
+      return this.isDateWithinSprintRange(startDateTime) &&
+             this.isDateWithinSprintRange(endDateTime);
+    }
+    
+    return basicValid;
   }
 
   async saveAction() {
