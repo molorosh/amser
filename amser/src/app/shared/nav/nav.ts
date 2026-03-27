@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -6,5 +6,15 @@ import { RouterLink } from '@angular/router';
   imports: [RouterLink],
   templateUrl: './nav.html',
   styleUrl: './nav.scss',
+  host: {
+    '[class.scrolled]': 'isScrolled()'
+  }
 })
-export class Nav {}
+export class Nav {
+  isScrolled = signal(false);
+
+  @HostListener('window:scroll')
+  onScroll() {
+    this.isScrolled.set(window.scrollY > 0);
+  }
+}
