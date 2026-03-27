@@ -74,7 +74,10 @@
   <div class="form-container">
     <div class="field">
       <label for="name">Name *</label>
-      <input pInputText id="name" [ngModel]="sprintName()" (ngModelChange)="sprintName.set($event)" class="w-full" />
+      <input pInputText id="name" [ngModel]="sprintName()" (ngModelChange)="sprintName.set($event)" class="w-full" maxlength="200" />
+      @if (!sprintName().trim()) {
+        <small class="p-error" style="color: red">Name is required</small>
+      }
     </div>
 
     <div class="field">

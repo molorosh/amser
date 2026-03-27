@@ -115,7 +115,10 @@
   <div class="form-container">
     <div class="field">
       <label for="name">Name *</label>
-      <input pInputText id="name" [ngModel]="taskName()" (ngModelChange)="taskName.set($event)" class="w-full" />
+      <input pInputText id="name" [ngModel]="taskName()" (ngModelChange)="taskName.set($event)" class="w-full" maxlength="200" />
+      @if (!taskName().trim()) {
+        <small class="p-error" style="color: red">Name is required</small>
+      }
     </div>
 
     <div class="field">
@@ -140,12 +143,13 @@
         (ngModelChange)="taskDescription.set($event)"
         rows="3"
         class="w-full"
+        maxlength="200"
       ></textarea>
     </div>
 
     <div class="field">
       <label for="url">URL</label>
-      <input pInputText id="url" [ngModel]="taskUrl()" (ngModelChange)="taskUrl.set($event)" class="w-full" />
+      <input pInputText id="url" [ngModel]="taskUrl()" (ngModelChange)="taskUrl.set($event)" class="w-full" maxlength="200" />
     </div>
 
     <div class="field-checkbox">
