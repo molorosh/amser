@@ -35,7 +35,11 @@
                             <span class="dot"></span>
                           </span>
                         }
-                        {{ sprintTask.task.name }}
+                        @if (sprintTask.task.url) {
+                          <a [href]="sprintTask.task.url" target="_blank" rel="noopener noreferrer">{{ sprintTask.task.name }}</a>
+                        } @else {
+                          {{ sprintTask.task.name }}
+                        }
                       </span>
                       <div class="task-actions">
                         @if (sprintTask.totalHours > 0) {
@@ -69,7 +73,11 @@
                             <span class="dot"></span>
                           </span>
                         }
-                        {{ sprintTask.task.name }}
+                        @if (sprintTask.task.url) {
+                          <a [href]="sprintTask.task.url" target="_blank" rel="noopener noreferrer">{{ sprintTask.task.name }}</a>
+                        } @else {
+                          {{ sprintTask.task.name }}
+                        }
                       </span>
                       <div class="task-actions">
                         @if (sprintTask.totalHours > 0) {
@@ -103,7 +111,11 @@
                             <span class="dot"></span>
                           </span>
                         }
-                        {{ sprintTask.task.name }}
+                        @if (sprintTask.task.url) {
+                          <a [href]="sprintTask.task.url" target="_blank" rel="noopener noreferrer">{{ sprintTask.task.name }}</a>
+                        } @else {
+                          {{ sprintTask.task.name }}
+                        }
                       </span>
                       <div class="task-actions">
                         @if (sprintTask.totalHours > 0) {
@@ -137,7 +149,11 @@
                             <span class="dot"></span>
                           </span>
                         }
-                        {{ sprintTask.task.name }}
+                        @if (sprintTask.task.url) {
+                          <a [href]="sprintTask.task.url" target="_blank" rel="noopener noreferrer">{{ sprintTask.task.name }}</a>
+                        } @else {
+                          {{ sprintTask.task.name }}
+                        }
                       </span>
                       <div class="task-actions">
                         @if (sprintTask.totalHours > 0) {
