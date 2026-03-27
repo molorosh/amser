@@ -100,6 +100,38 @@
           color: var(--p-text-color);
           font-size: 0.9rem;
           padding-left: 1.25rem;
+
+          a {
+            color: var(--p-primary-color);
+            text-decoration: underline;
+          }
+
+          .description-indicator {
+            font-size: 0.75rem;
+            cursor: help;
+            background-color: rgba(147, 112, 219, 0.25);
+            padding: 0.15rem 0.35rem;
+            border-radius: 4px;
+            position: relative;
+
+            &:hover::after {
+              content: attr(data-tooltip);
+              position: absolute;
+              bottom: 100%;
+              left: 50%;
+              transform: translateX(-50%);
+              background-color: var(--p-surface-700, #374151);
+              color: var(--p-surface-0, #fff);
+              padding: 0.5rem 0.75rem;
+              border-radius: 6px;
+              font-size: 0.8rem;
+              white-space: pre-wrap;
+              max-width: 250px;
+              z-index: 1000;
+              margin-bottom: 0.25rem;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            }
+          }
         }
 
         .in-progress-indicator {
