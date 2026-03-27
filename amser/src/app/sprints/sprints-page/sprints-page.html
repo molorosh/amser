@@ -103,6 +103,9 @@
       @if (sprintEndDate() && !isDateValid(sprintEndDate())) {
         <small class="p-error" style="color: red">Date must be between Jan 28, 1813 and Feb 02, 2222</small>
       }
+      @if (sprintStartDate() && sprintEndDate() && !areDatesAtLeastOneDayApart()) {
+        <small class="p-error" style="color: red">End date must be at least 1 day after start date</small>
+      }
     </div>
 
     <div class="field">
@@ -112,8 +115,12 @@
         [ngModel]="sprintHoursPerDay()"
         (ngModelChange)="sprintHoursPerDay.set($event)"
         [min]="1"
+        [max]="15"
         styleClass="w-full"
       />
+      @if (!isHoursPerDayValid()) {
+        <small class="p-error" style="color: red">Hours per day must be between 1 and 15</small>
+      }
     </div>
 
     <div class="field">
@@ -123,8 +130,12 @@
         [ngModel]="sprintDaysPerSprint()"
         (ngModelChange)="sprintDaysPerSprint.set($event)"
         [min]="1"
+        [max]="getMaxDaysInRange()"
         styleClass="w-full"
       />
+      @if (!isDaysPerSprintValid()) {
+        <small class="p-error" style="color: red">Days per sprint must be between 1 and {{ getMaxDaysInRange() }}</small>
+      }
     </div>
 
     <div class="field-checkbox">

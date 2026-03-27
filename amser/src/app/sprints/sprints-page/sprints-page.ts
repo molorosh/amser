@@ -125,6 +125,34 @@ export class SprintsPage implements OnInit {
     return date ? isDateInValidRange(date) : true;
   }
 
+  getMaxDaysInRange(): number {
+    const startDate = this.sprintStartDate();
+    const endDate = this.sprintEndDate();
+    if (!startDate || !endDate) return 1;
+    const diffTime = endDate.getTime() - startDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    return Math.max(1, diffDays);
+  }
+
+  areDatesAtLeastOneDayApart(): boolean {
+    const startDate = this.sprintStartDate();
+    const endDate = this.sprintEndDate();
+    if (!startDate || !endDate) return true;
+    const diffTime = endDate.getTime() - startDate.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    return diffDays >= 1;
+  }
+
+  isHoursPerDayValid(): boolean {
+    const hours = this.sprintHoursPerDay();
+    return hours >= 1 && hours <= 15;
+  }
+
+  isDaysPerSprintValid(): boolean {
+    const days = this.sprintDaysPerSprint();
+    return days >= 1 && days <= this.getMaxDaysInRange();
+  }
+
   isFormValid(): boolean {
     const startDate = this.sprintStartDate();
     const endDate = this.sprintEndDate();
@@ -134,8 +162,9 @@ export class SprintsPage implements OnInit {
       endDate &&
       isDateInValidRange(startDate) &&
       isDateInValidRange(endDate) &&
-      this.sprintHoursPerDay() > 0 &&
-      this.sprintDaysPerSprint() > 0
+      this.areDatesAtLeastOneDayApart() &&
+      this.isHoursPerDayValid() &&
+      this.isDaysPerSprintValid()
     );
   }
 
