@@ -145,6 +145,7 @@
         (ngModelChange)="actionStartDateTime.set($event)"
         [showTime]="true"
         dateFormat="dd/mm/yy"
+        [appendTo]="'body'"
         styleClass="w-full"
       />
       @if (actionStartDateTime() && !isDateValid(actionStartDateTime())) {
@@ -160,6 +161,7 @@
         (ngModelChange)="actionEndDateTime.set($event)"
         [showTime]="true"
         dateFormat="dd/mm/yy"
+        [appendTo]="'body'"
         styleClass="w-full"
       />
       @if (actionEndDateTime() && !isDateValid(actionEndDateTime())) {

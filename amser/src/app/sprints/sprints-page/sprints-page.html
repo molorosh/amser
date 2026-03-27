@@ -84,6 +84,7 @@
         [ngModel]="sprintStartDate()"
         (ngModelChange)="sprintStartDate.set($event)"
         dateFormat="dd/mm/yy"
+        [appendTo]="'body'"
         styleClass="w-full"
       />
       @if (sprintStartDate() && !isDateValid(sprintStartDate())) {
@@ -98,6 +99,7 @@
         [ngModel]="sprintEndDate()"
         (ngModelChange)="sprintEndDate.set($event)"
         dateFormat="dd/mm/yy"
+        [appendTo]="'body'"
         styleClass="w-full"
       />
       @if (sprintEndDate() && !isDateValid(sprintEndDate())) {
