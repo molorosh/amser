@@ -11,6 +11,15 @@
       margin: 0;
       color: var(--p-text-color);
     }
+
+    .hidden-button {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
 
   .filter-section {

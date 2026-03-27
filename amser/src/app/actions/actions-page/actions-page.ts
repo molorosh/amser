@@ -166,7 +166,7 @@ export class ActionsPage implements OnInit {
     this.actionStartDateTime.set(new Date());
     this.actionEndDateTime.set(null);
     this.actionTaskId.set('');
-    this.actionSprintId.set('');
+    this.actionSprintId.set(this.selectedSprintFilter() || '');
     this.dialogVisible.set(true);
   }
 

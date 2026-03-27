@@ -156,7 +156,7 @@ export class CurrentSprint {
 
   onRemoveAllocation(sprintTask: SprintTask) {
     this.confirmationService.confirm({
-      message: 'Remove from this sprint?',
+      message: `Remove "${sprintTask.task.name}" from this sprint?`,
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
