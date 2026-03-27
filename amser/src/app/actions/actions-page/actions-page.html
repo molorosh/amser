@@ -2,7 +2,7 @@
   <div class="header">
     <h1>Actions</h1>
     <span class="hidden-button">
-      <p-button label="New Action" icon="pi pi-plus" (onClick)="openNewActionDialog()" />
+      <p-button data-testid="actions_new" label="New Action" icon="pi pi-plus" (onClick)="openNewActionDialog()" />
     </span>
   </div>
 
@@ -31,6 +31,7 @@
       Sprint:
     </span>
     <p-select
+      data-testid="actions_sprint_filter"
       [options]="sprintFilterOptions()"
       [ngModel]="selectedSprintFilter()"
       (ngModelChange)="selectedSprintFilter.set($event)"
@@ -41,7 +42,7 @@
     />
   </div>
 
-  <p-table [value]="filteredActions()" [tableStyle]="{ 'min-width': '60rem' }" styleClass="p-datatable-striped">
+  <p-table data-testid="actions_table" [value]="filteredActions()" [tableStyle]="{ 'min-width': '60rem' }" styleClass="p-datatable-striped">
     <ng-template #header>
       <tr>
         <th style="width: 40px"></th>
@@ -76,8 +77,8 @@
           }
         </td>
         <td>
-          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditActionDialog(action)" />
-          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(action)" />
+          <p-button data-testid="actions_edit" icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditActionDialog(action)" />
+          <p-button data-testid="actions_delete" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(action)" />
         </td>
       </tr>
     </ng-template>
@@ -101,6 +102,7 @@
     <div class="field">
       <label for="actionType">Type *</label>
       <p-select
+        data-testid="dlg_action_type_select"
         id="actionType"
         [options]="actionTypeOptions"
         [ngModel]="actionType()"
@@ -114,6 +116,7 @@
     <div class="field">
       <label for="task">Task *</label>
       <p-select
+        data-testid="dlg_action_task_select"
         id="task"
         [options]="tasks()"
         [ngModel]="actionTaskId()"
@@ -128,6 +131,7 @@
     <div class="field">
       <label for="sprint">Sprint *</label>
       <p-select
+        data-testid="dlg_action_sprint_select"
         id="sprint"
         [options]="sprints()"
         [ngModel]="actionSprintId()"
@@ -142,6 +146,7 @@
     <div class="field">
       <label for="startDateTime">Start Date/Time *</label>
       <p-datepicker
+        data-testid="dlg_action_startdatetime_picker"
         id="startDateTime"
         [ngModel]="actionStartDateTime()"
         (ngModelChange)="actionStartDateTime.set($event)"
@@ -161,6 +166,7 @@
     <div class="field">
       <label for="endDateTime">End Date/Time</label>
       <p-datepicker
+        data-testid="dlg_action_enddatetime_picker"
         id="endDateTime"
         [ngModel]="actionEndDateTime()"
         (ngModelChange)="actionEndDateTime.set($event)"
@@ -179,8 +185,8 @@
   </div>
 
   <ng-template #footer>
-    <p-button label="Cancel" [text]="true" (onClick)="cancelDialog()" />
-    <p-button label="Save" (onClick)="saveAction()" [disabled]="!isFormValid()" />
+    <p-button data-testid="dlg_action_cancel" label="Cancel" [text]="true" (onClick)="cancelDialog()" />
+    <p-button data-testid="dlg_action_save" label="Save" (onClick)="saveAction()" [disabled]="!isFormValid()" />
   </ng-template>
 </p-dialog>
 

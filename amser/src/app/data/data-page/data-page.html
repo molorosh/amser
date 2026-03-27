@@ -3,8 +3,8 @@
   <p class="description">Manage your data here.</p>
 
   <div class="actions">
-    <button class="action-btn" (click)="exportData()">Export Data</button>
-    <button class="action-btn" (click)="triggerFileInput()">Import Data</button>
+    <button class="action-btn" data-testid="data_export" (click)="exportData()">Export Data</button>
+    <button class="action-btn" data-testid="data_import" (click)="triggerFileInput()">Import Data</button>
     <input
       type="file"
       id="importFileInput"

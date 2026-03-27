@@ -1,7 +1,7 @@
 <div class="sprints-container">
   <div class="header">
     <h1>Sprints</h1>
-    <p-button label="New Sprint" icon="pi pi-plus" (onClick)="openNewSprintDialog()" />
+    <p-button data-testid="sprints_new" label="New Sprint" icon="pi pi-plus" (onClick)="openNewSprintDialog()" />
   </div>
 
   <div class="filter-section">
@@ -23,7 +23,7 @@
     }
   </div>
 
-  <p-table [value]="filteredSprints()" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
+  <p-table data-testid="sprints_table" [value]="filteredSprints()" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
     <ng-template #header>
       <tr>
         <th>Name</th>
@@ -50,8 +50,8 @@
           }
         </td>
         <td>
-          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditSprintDialog(sprint)" />
-          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(sprint)" />
+          <p-button data-testid="sprints_edit" icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditSprintDialog(sprint)" />
+          <p-button data-testid="sprints_delete" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(sprint)" />
         </td>
       </tr>
     </ng-template>
@@ -74,7 +74,7 @@
   <div class="form-container">
     <div class="field">
       <label for="name">Name *</label>
-      <input pInputText id="name" [ngModel]="sprintName()" (ngModelChange)="sprintName.set($event)" class="w-full" maxlength="200" />
+      <input pInputText data-testid="dlg_sprint_name_input" id="name" [ngModel]="sprintName()" (ngModelChange)="sprintName.set($event)" class="w-full" maxlength="200" />
       @if (!sprintName().trim()) {
         <small class="p-error" style="color: red">Name is required</small>
       }
@@ -83,6 +83,7 @@
     <div class="field">
       <label for="startDate">Start Date *</label>
       <p-datepicker
+        data-testid="dlg_sprint_startdate_picker"
         id="startDate"
         [ngModel]="sprintStartDate()"
         (ngModelChange)="sprintStartDate.set($event)"
@@ -98,6 +99,7 @@
     <div class="field">
       <label for="endDate">End Date *</label>
       <p-datepicker
+        data-testid="dlg_sprint_enddate_picker"
         id="endDate"
         [ngModel]="sprintEndDate()"
         (ngModelChange)="sprintEndDate.set($event)"
@@ -116,6 +118,7 @@
     <div class="field">
       <label for="hoursPerDay">Hours per Day *</label>
       <p-inputnumber
+        data-testid="dlg_sprint_hoursperday_input"
         id="hoursPerDay"
         [ngModel]="sprintHoursPerDay()"
         (ngModelChange)="sprintHoursPerDay.set($event)"
@@ -131,6 +134,7 @@
     <div class="field">
       <label for="daysPerSprint">Days per Sprint *</label>
       <p-inputnumber
+        data-testid="dlg_sprint_dayspersprint_input"
         id="daysPerSprint"
         [ngModel]="sprintDaysPerSprint()"
         (ngModelChange)="sprintDaysPerSprint.set($event)"
@@ -145,6 +149,7 @@
 
     <div class="field-checkbox">
       <p-checkbox
+        data-testid="dlg_sprint_iscurrent_checkbox"
         inputId="isCurrent"
         [ngModel]="sprintIsCurrent()"
         (ngModelChange)="sprintIsCurrent.set($event)"
@@ -155,8 +160,8 @@
   </div>
 
   <ng-template #footer>
-    <p-button label="Cancel" [text]="true" (onClick)="cancelDialog()" />
-    <p-button label="Save" (onClick)="saveSprint()" [disabled]="!isFormValid()" />
+    <p-button data-testid="dlg_sprint_cancel" label="Cancel" [text]="true" (onClick)="cancelDialog()" />
+    <p-button data-testid="dlg_sprint_save" label="Save" (onClick)="saveSprint()" [disabled]="!isFormValid()" />
   </ng-template>
 </p-dialog>
 

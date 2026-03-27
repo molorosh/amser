@@ -8,6 +8,7 @@
         <span class="setting-description">Switch to a white-on-black style</span>
       </div>
       <p-toggleswitch
+        data-testid="settings_dark_mode"
         [ngModel]="darkMode()"
         (ngModelChange)="onDarkModeChange($event)"
       />

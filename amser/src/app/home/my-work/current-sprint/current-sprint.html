@@ -12,10 +12,10 @@
     <span class="date-value">{{ sprint().endDate | date: 'EEE dd-MMM-yyyy' }}</span>
   </div>
 
-  <p-tabs value="0">
+  <p-tabs data-testid="sprint_tabs" value="0">
     <p-tablist>
-      <p-tab value="0">Tasks</p-tab>
-      <p-tab value="1">Days</p-tab>
+      <p-tab data-testid="sprint_tab_tasks" value="0">Tasks</p-tab>
+      <p-tab data-testid="sprint_tab_days" value="1">Days</p-tab>
     </p-tablist>
     <p-tabpanels>
       <p-tabpanel value="0">
@@ -24,7 +24,7 @@
             @if (workItemTasks().length > 0) {
               <div class="task-group">
                 <h4>Work Items</h4>
-                <ul class="task-list">
+                <ul class="task-list" data-testid="sprint_list_workitems">
                   @for (sprintTask of workItemTasks(); track sprintTask.task.id) {
                     <li class="task-item" [class.active]="hasInProgressTimer(sprintTask)">
                       <span class="task-name">
@@ -51,13 +51,13 @@
                         <span class="hover-button">
                           @if (hasOnlyAllocation(sprintTask)) {
                             <span class="remove-btn">
-                              <p-button label="Remove" size="small" (onClick)="onRemoveAllocation(sprintTask)" />
+                              <p-button data-testid="sprint_work_remove" label="Remove" size="small" (onClick)="onRemoveAllocation(sprintTask)" />
                             </span>
                           }
                           @if (hasInProgressTimer(sprintTask)) {
-                            <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
+                            <p-button data-testid="sprint_work_stop" label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
                           } @else {
-                            <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
+                            <p-button data-testid="sprint_work_start" label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
                           }
                         </span>
                       </div>
@@ -70,7 +70,7 @@
             @if (meetingTasks().length > 0) {
               <div class="task-group">
                 <h4>Meetings</h4>
-                <ul class="task-list">
+                <ul class="task-list" data-testid="sprint_list_meetings">
                   @for (sprintTask of meetingTasks(); track sprintTask.task.id) {
                     <li class="task-item" [class.active]="hasInProgressTimer(sprintTask)">
                       <span class="task-name">
@@ -97,13 +97,13 @@
                         <span class="hover-button">
                           @if (hasOnlyAllocation(sprintTask)) {
                             <span class="remove-btn">
-                              <p-button label="Remove" size="small" (onClick)="onRemoveAllocation(sprintTask)" />
+                              <p-button data-testid="sprint_meeting_remove" label="Remove" size="small" (onClick)="onRemoveAllocation(sprintTask)" />
                             </span>
                           }
                           @if (hasInProgressTimer(sprintTask)) {
-                            <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
+                            <p-button data-testid="sprint_meeting_stop" label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
                           } @else {
-                            <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
+                            <p-button data-testid="sprint_meeting_start" label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
                           }
                         </span>
                       </div>
@@ -116,7 +116,7 @@
             @if (peopleTasks().length > 0) {
               <div class="task-group">
                 <h4>People</h4>
-                <ul class="task-list">
+                <ul class="task-list" data-testid="sprint_list_people">
                   @for (sprintTask of peopleTasks(); track sprintTask.task.id) {
                     <li class="task-item" [class.active]="hasInProgressTimer(sprintTask)">
                       <span class="task-name">
@@ -143,13 +143,13 @@
                         <span class="hover-button">
                           @if (hasOnlyAllocation(sprintTask)) {
                             <span class="remove-btn">
-                              <p-button label="Remove" size="small" (onClick)="onRemoveAllocation(sprintTask)" />
+                              <p-button data-testid="sprint_people_remove" label="Remove" size="small" (onClick)="onRemoveAllocation(sprintTask)" />
                             </span>
                           }
                           @if (hasInProgressTimer(sprintTask)) {
-                            <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
+                            <p-button data-testid="sprint_people_stop" label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
                           } @else {
-                            <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
+                            <p-button data-testid="sprint_people_start" label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
                           }
                         </span>
                       </div>
@@ -162,7 +162,7 @@
             @if (otherTasks().length > 0) {
               <div class="task-group">
                 <h4>Other</h4>
-                <ul class="task-list">
+                <ul class="task-list" data-testid="sprint_list_other">
                   @for (sprintTask of otherTasks(); track sprintTask.task.id) {
                     <li class="task-item" [class.active]="hasInProgressTimer(sprintTask)">
                       <span class="task-name">
@@ -189,13 +189,13 @@
                         <span class="hover-button">
                           @if (hasOnlyAllocation(sprintTask)) {
                             <span class="remove-btn">
-                              <p-button label="Remove" size="small" (onClick)="onRemoveAllocation(sprintTask)" />
+                              <p-button data-testid="sprint_other_remove" label="Remove" size="small" (onClick)="onRemoveAllocation(sprintTask)" />
                             </span>
                           }
                           @if (hasInProgressTimer(sprintTask)) {
-                            <p-button label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
+                            <p-button data-testid="sprint_other_stop" label="Stop" size="small" severity="danger" (onClick)="onStopTimer(sprintTask)" />
                           } @else {
-                            <p-button label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
+                            <p-button data-testid="sprint_other_start" label="Start" size="small" (onClick)="onStartTimer(sprintTask)" />
                           }
                         </span>
                       </div>
