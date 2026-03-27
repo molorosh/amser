@@ -1,7 +1,9 @@
-import { Component, input, computed, output } from '@angular/core';
+import { Component, input, computed, output, inject } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Button } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import { Sprint } from '../../../models/sprint';
 import { Task } from '../../../models/task';
 import { Action } from '../../../models/action';
@@ -12,11 +14,14 @@ import { TimeDisplayMode } from '../my-work';
 
 @Component({
   selector: 'app-current-sprint',
-  imports: [DatePipe, Button, TabsModule],
+  imports: [DatePipe, Button, TabsModule, ConfirmDialog],
+  providers: [ConfirmationService],
   templateUrl: './current-sprint.html',
   styleUrl: './current-sprint.scss',
 })
 export class CurrentSprint {
+  private confirmationService = inject(ConfirmationService);
+
   sprint = input.required<Sprint>();
   tasks = input.required<Task[]>();
   actions = input.required<Action[]>();
@@ -24,6 +29,7 @@ export class CurrentSprint {
 
   timerStarted = output<{ taskId: string; sprintId: string }>();
   timerStopped = output<{ taskId: string; sprintId: string; actionId: string }>();
+  allocationRemoved = output<{ actionId: string }>();
 
   sprintTasks = computed<SprintTask[]>(() => 
     createSprintTasks(this.sprint().id, this.tasks(), this.actions())
@@ -130,5 +136,35 @@ export class CurrentSprint {
         actionId: action.id,
       });
     }
+  }
+
+  hasOnlyAllocation(sprintTask: SprintTask): boolean {
+    const hasTimeRecords = sprintTask.actions.some(
+      action => action.actionType === ActionType.Time
+    );
+    const hasAllocation = sprintTask.actions.some(
+      action => action.actionType === ActionType.Allocation
+    );
+    return hasAllocation && !hasTimeRecords;
+  }
+
+  getAllocationAction(sprintTask: SprintTask): Action | undefined {
+    return sprintTask.actions.find(
+      action => action.actionType === ActionType.Allocation
+    );
+  }
+
+  onRemoveAllocation(sprintTask: SprintTask) {
+    this.confirmationService.confirm({
+      message: `Remove "${sprintTask.task.name}" from this sprint?`,
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        const action = this.getAllocationAction(sprintTask);
+        if (action) {
+          this.allocationRemoved.emit({ actionId: action.id });
+        }
+      },
+    });
   }
 }

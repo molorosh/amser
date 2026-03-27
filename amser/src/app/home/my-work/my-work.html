@@ -3,7 +3,7 @@
     <h2>My Work</h2>
     <div class="display-toggle">
       <span [class.active]="!showDays()">Hours</span>
-      <p-toggleswitch [(ngModel)]="showDays" />
+      <p-toggleswitch data-testid="mywork_toggle_display" [(ngModel)]="showDays" />
       <span [class.active]="showDays()">Days</span>
     </div>
   </div>
@@ -17,7 +17,8 @@
           [actions]="actions()" 
           [displayMode]="displayMode()"
           (timerStarted)="onTimerStarted($event)"
-          (timerStopped)="onTimerStopped($event)" />
+          (timerStopped)="onTimerStopped($event)"
+          (allocationRemoved)="onAllocationRemoved($event)" />
       }
     </div>
   } @else {

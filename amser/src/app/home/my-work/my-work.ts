@@ -88,4 +88,11 @@ export class MyWork implements OnInit {
       );
     }
   }
+
+  async onAllocationRemoved(event: { actionId: string }) {
+    await this.persistence.deleteAction(event.actionId);
+    this.actions.update(actions => 
+      actions.filter(a => a.id !== event.actionId)
+    );
+  }
 }

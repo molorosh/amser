@@ -5,11 +5,13 @@ import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { Select } from 'primeng/select';
 import { DatePicker } from 'primeng/datepicker';
+import { InputNumber } from 'primeng/inputnumber';
 import { RadioButton } from 'primeng/radiobutton';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import { Action, createAction, calculateTotalHours } from '../../models/action';
+import { isDateInValidRange } from '../../shared/date-constraints';
 import { ActionType } from '../../models/action-type';
 import { Task } from '../../models/task';
 import { TaskType } from '../../models/task-type';
@@ -18,7 +20,7 @@ import { PersistenceService } from '../../services/persistence.service';
 
 @Component({
   selector: 'app-actions-page',
-  imports: [FormsModule, TableModule, Button, Dialog, Select, DatePicker, RadioButton, ConfirmDialog, DatePipe],
+  imports: [FormsModule, TableModule, Button, Dialog, Select, DatePicker, InputNumber, RadioButton, ConfirmDialog, DatePipe],
   providers: [ConfirmationService],
   templateUrl: './actions-page.html',
   styleUrl: './actions-page.scss',
@@ -89,6 +91,8 @@ export class ActionsPage implements OnInit {
     const sprintFilter = this.selectedSprintFilter();
     const taskTypeFilter = this.selectedTaskTypeFilter();
     let actions = this.actions();
+    // Exclude Allocation records from "Show All"
+    actions = actions.filter(action => action.actionType !== ActionType.Allocation);
     if (sprintFilter) {
       actions = actions.filter(action => action.sprintId === sprintFilter);
     }
@@ -112,6 +116,15 @@ export class ActionsPage implements OnInit {
   actionEndDateTime = signal<Date | null>(null);
   actionTaskId = signal<string>('');
   actionSprintId = signal<string>('');
+
+  // Time input fields
+  startHours = signal<number>(new Date().getHours());
+  startMinutes = signal<number>(new Date().getMinutes());
+  endHours = signal<number>(0);
+  endMinutes = signal<number>(0);
+
+  // Flag to prevent date change handlers during dialog initialization
+  private isInitializingDialog = false;
 
   actionTypeOptions = [
     { label: 'Allocation', value: ActionType.Allocation },
@@ -157,33 +170,92 @@ export class ActionsPage implements OnInit {
   }
 
   openNewActionDialog() {
+    this.isInitializingDialog = true;
     this.isEditing.set(false);
     this.currentAction.set(null);
     this.actionType.set(ActionType.Allocation);
-    this.actionStartDateTime.set(new Date());
+    const now = new Date();
+    this.startHours.set(now.getHours());
+    this.startMinutes.set(now.getMinutes());
+    this.actionStartDateTime.set(now);
     this.actionEndDateTime.set(null);
+    this.endHours.set(0);
+    this.endMinutes.set(0);
     this.actionTaskId.set('');
-    this.actionSprintId.set('');
+    this.actionSprintId.set(this.selectedSprintFilter() || '');
     this.dialogVisible.set(true);
+    // Allow change handlers to work after dialog is initialized
+    setTimeout(() => this.isInitializingDialog = false, 0);
   }
 
   openEditActionDialog(action: Action) {
+    this.isInitializingDialog = true;
     this.isEditing.set(true);
     this.currentAction.set(action);
     this.actionType.set(action.actionType);
-    this.actionStartDateTime.set(new Date(action.startDateTime));
-    this.actionEndDateTime.set(action.endDateTime ? new Date(action.endDateTime) : null);
+    const startDate = new Date(action.startDateTime);
+    // Set hours/minutes BEFORE datetime to avoid race condition with ngModel change events
+    this.startHours.set(startDate.getHours());
+    this.startMinutes.set(startDate.getMinutes());
+    this.actionStartDateTime.set(startDate);
+    if (action.endDateTime) {
+      const endDate = new Date(action.endDateTime);
+      this.endHours.set(endDate.getHours());
+      this.endMinutes.set(endDate.getMinutes());
+      this.actionEndDateTime.set(endDate);
+    } else {
+      this.endHours.set(0);
+      this.endMinutes.set(0);
+      this.actionEndDateTime.set(null);
+    }
     this.actionTaskId.set(action.taskId);
     this.actionSprintId.set(action.sprintId);
     this.dialogVisible.set(true);
+    // Allow change handlers to work after dialog is initialized
+    setTimeout(() => this.isInitializingDialog = false, 0);
+  }
+
+  isDateValid(date: Date | null): boolean {
+    return date ? isDateInValidRange(date) : true;
+  }
+
+  getSelectedSprint(): Sprint | undefined {
+    return this.sprintMap().get(this.actionSprintId());
+  }
+
+  isDateWithinSprintRange(date: Date | null): boolean {
+    if (!date) return true;
+    const sprint = this.getSelectedSprint();
+    if (!sprint) return true;
+    
+    const sprintStart = new Date(sprint.startDate);
+    sprintStart.setHours(0, 0, 0, 0);
+    const sprintEnd = new Date(sprint.endDate);
+    sprintEnd.setHours(23, 59, 59, 999);
+    
+    return date >= sprintStart && date <= sprintEnd;
   }
 
   isFormValid(): boolean {
-    return !!(
+    const startDateTime = this.actionStartDateTime();
+    const endDateTime = this.actionEndDateTime();
+    const actionType = this.actionType();
+    
+    const basicValid = !!(
       this.actionTaskId() &&
       this.actionSprintId() &&
-      this.actionStartDateTime()
+      startDateTime &&
+      isDateInValidRange(startDateTime) &&
+      (!endDateTime || isDateInValidRange(endDateTime))
     );
+    
+    // For Time actions, also validate dates are within sprint range
+    if (basicValid && actionType === ActionType.Time) {
+      return this.isDateWithinSprintRange(startDateTime) &&
+             this.isDateWithinSprintRange(endDateTime);
+    }
+    
+    return basicValid;
   }
 
   async saveAction() {
@@ -238,5 +310,64 @@ export class ActionsPage implements OnInit {
 
   cancelDialog() {
     this.dialogVisible.set(false);
+  }
+
+  // Time input handlers
+  onStartDateChange(date: Date | null) {
+    if (this.isInitializingDialog || !date) return;
+    const newDate = new Date(date);
+    newDate.setHours(this.startHours(), this.startMinutes(), 0, 0);
+    this.actionStartDateTime.set(newDate);
+  }
+
+  onStartHoursChange(hours: number | null) {
+    const h = hours ?? 0;
+    this.startHours.set(h);
+    const current = this.actionStartDateTime();
+    const newDate = new Date(current);
+    newDate.setHours(h, this.startMinutes(), 0, 0);
+    this.actionStartDateTime.set(newDate);
+  }
+
+  onStartMinutesChange(minutes: number | null) {
+    const m = minutes ?? 0;
+    this.startMinutes.set(m);
+    const current = this.actionStartDateTime();
+    const newDate = new Date(current);
+    newDate.setHours(this.startHours(), m, 0, 0);
+    this.actionStartDateTime.set(newDate);
+  }
+
+  onEndDateChange(date: Date | null) {
+    if (this.isInitializingDialog) return;
+    if (date) {
+      const newDate = new Date(date);
+      newDate.setHours(this.endHours(), this.endMinutes(), 0, 0);
+      this.actionEndDateTime.set(newDate);
+    } else {
+      this.actionEndDateTime.set(null);
+    }
+  }
+
+  onEndHoursChange(hours: number | null) {
+    const h = hours ?? 0;
+    this.endHours.set(h);
+    const current = this.actionEndDateTime();
+    if (current) {
+      const newDate = new Date(current);
+      newDate.setHours(h, this.endMinutes(), 0, 0);
+      this.actionEndDateTime.set(newDate);
+    }
+  }
+
+  onEndMinutesChange(minutes: number | null) {
+    const m = minutes ?? 0;
+    this.endMinutes.set(m);
+    const current = this.actionEndDateTime();
+    if (current) {
+      const newDate = new Date(current);
+      newDate.setHours(this.endHours(), m, 0, 0);
+      this.actionEndDateTime.set(newDate);
+    }
   }
 }

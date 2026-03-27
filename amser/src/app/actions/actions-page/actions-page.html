@@ -1,7 +1,9 @@
 <div class="actions-container">
   <div class="header">
     <h1>Actions</h1>
-    <p-button label="New Action" icon="pi pi-plus" (onClick)="openNewActionDialog()" />
+    <span class="hidden-button">
+      <p-button data-testid="actions_new" label="New Action" icon="pi pi-plus" (onClick)="openNewActionDialog()" />
+    </span>
   </div>
 
   <div class="filter-section">
@@ -29,6 +31,7 @@
       Sprint:
     </span>
     <p-select
+      data-testid="actions_sprint_filter"
       [options]="sprintFilterOptions()"
       [ngModel]="selectedSprintFilter()"
       (ngModelChange)="selectedSprintFilter.set($event)"
@@ -39,7 +42,7 @@
     />
   </div>
 
-  <p-table [value]="filteredActions()" [tableStyle]="{ 'min-width': '60rem' }" styleClass="p-datatable-striped">
+  <p-table data-testid="actions_table" [value]="filteredActions()" [tableStyle]="{ 'min-width': '60rem' }" styleClass="p-datatable-striped">
     <ng-template #header>
       <tr>
         <th style="width: 40px"></th>
@@ -74,8 +77,8 @@
           }
         </td>
         <td>
-          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditActionDialog(action)" />
-          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(action)" />
+          <p-button data-testid="actions_edit" icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditActionDialog(action)" />
+          <p-button data-testid="actions_delete" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(action)" />
         </td>
       </tr>
     </ng-template>
@@ -99,6 +102,7 @@
     <div class="field">
       <label for="actionType">Type *</label>
       <p-select
+        data-testid="dlg_action_type_select"
         id="actionType"
         [options]="actionTypeOptions"
         [ngModel]="actionType()"
@@ -112,6 +116,7 @@
     <div class="field">
       <label for="task">Task *</label>
       <p-select
+        data-testid="dlg_action_task_select"
         id="task"
         [options]="tasks()"
         [ngModel]="actionTaskId()"
@@ -126,6 +131,7 @@
     <div class="field">
       <label for="sprint">Sprint *</label>
       <p-select
+        data-testid="dlg_action_sprint_select"
         id="sprint"
         [options]="sprints()"
         [ngModel]="actionSprintId()"
@@ -140,31 +146,89 @@
     <div class="field">
       <label for="startDateTime">Start Date/Time *</label>
       <p-datepicker
+        data-testid="dlg_action_startdatetime_picker"
         id="startDateTime"
         [ngModel]="actionStartDateTime()"
-        (ngModelChange)="actionStartDateTime.set($event)"
-        [showTime]="true"
+        (ngModelChange)="onStartDateChange($event)"
         dateFormat="dd/mm/yy"
+        [appendTo]="'body'"
         styleClass="w-full"
       />
+      <div class="time-inputs">
+        <p-inputNumber
+          data-testid="dlg_action_start_hours"
+          [ngModel]="startHours()"
+          (ngModelChange)="onStartHoursChange($event)"
+          [min]="0"
+          [max]="23"
+          [showButtons]="true"
+          [inputStyle]="{ width: '6rem', textAlign: 'center', color: 'inherit' }"
+        />
+        <span class="time-separator">:</span>
+        <p-inputNumber
+          data-testid="dlg_action_start_minutes"
+          [ngModel]="startMinutes()"
+          (ngModelChange)="onStartMinutesChange($event)"
+          [min]="0"
+          [max]="59"
+          [showButtons]="true"
+          [inputStyle]="{ width: '6rem', textAlign: 'center', color: 'inherit' }"
+        />
+      </div>
+      @if (actionStartDateTime() && !isDateValid(actionStartDateTime())) {
+        <small class="p-error" style="color: red">Date must be between Jan 28, 1813 and Feb 02, 2222</small>
+      }
+      @if (actionType() === ActionType.Time && actionStartDateTime() && actionSprintId() && !isDateWithinSprintRange(actionStartDateTime())) {
+        <small class="p-error" style="color: red">Date must be within the sprint date range</small>
+      }
     </div>
 
     <div class="field">
       <label for="endDateTime">End Date/Time</label>
       <p-datepicker
+        data-testid="dlg_action_enddatetime_picker"
         id="endDateTime"
         [ngModel]="actionEndDateTime()"
-        (ngModelChange)="actionEndDateTime.set($event)"
-        [showTime]="true"
+        (ngModelChange)="onEndDateChange($event)"
         dateFormat="dd/mm/yy"
+        [appendTo]="'body'"
         styleClass="w-full"
       />
+      <div class="time-inputs">
+        <p-inputNumber
+          data-testid="dlg_action_end_hours"
+          [ngModel]="endHours()"
+          (ngModelChange)="onEndHoursChange($event)"
+          [min]="0"
+          [max]="23"
+          [showButtons]="true"
+          [disabled]="!actionEndDateTime()"
+          [inputStyle]="{ width: '6rem', textAlign: 'center', color: 'inherit' }"
+        />
+        <span class="time-separator">:</span>
+        <p-inputNumber
+          data-testid="dlg_action_end_minutes"
+          [ngModel]="endMinutes()"
+          (ngModelChange)="onEndMinutesChange($event)"
+          [min]="0"
+          [max]="59"
+          [showButtons]="true"
+          [disabled]="!actionEndDateTime()"
+          [inputStyle]="{ width: '6rem', textAlign: 'center', color: 'inherit' }"
+        />
+      </div>
+      @if (actionEndDateTime() && !isDateValid(actionEndDateTime())) {
+        <small class="p-error" style="color: red">Date must be between Jan 28, 1813 and Feb 02, 2222</small>
+      }
+      @if (actionType() === ActionType.Time && actionEndDateTime() && actionSprintId() && !isDateWithinSprintRange(actionEndDateTime())) {
+        <small class="p-error" style="color: red">Date must be within the sprint date range</small>
+      }
     </div>
   </div>
 
   <ng-template #footer>
-    <p-button label="Cancel" [text]="true" (onClick)="cancelDialog()" />
-    <p-button label="Save" (onClick)="saveAction()" [disabled]="!isFormValid()" />
+    <p-button data-testid="dlg_action_cancel" label="Cancel" [text]="true" (onClick)="cancelDialog()" />
+    <p-button data-testid="dlg_action_save" label="Save" (onClick)="saveAction()" [disabled]="!isFormValid()" />
   </ng-template>
 </p-dialog>
 

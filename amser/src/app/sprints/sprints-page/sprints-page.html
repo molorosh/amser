@@ -1,7 +1,7 @@
 <div class="sprints-container">
   <div class="header">
     <h1>Sprints</h1>
-    <p-button label="New Sprint" icon="pi pi-plus" (onClick)="openNewSprintDialog()" />
+    <p-button data-testid="sprints_new" label="New Sprint" icon="pi pi-plus" (onClick)="openNewSprintDialog()" />
   </div>
 
   <div class="filter-section">
@@ -23,7 +23,7 @@
     }
   </div>
 
-  <p-table [value]="filteredSprints()" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
+  <p-table data-testid="sprints_table" [value]="filteredSprints()" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
     <ng-template #header>
       <tr>
         <th>Name</th>
@@ -50,8 +50,8 @@
           }
         </td>
         <td>
-          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditSprintDialog(sprint)" />
-          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(sprint)" />
+          <p-button data-testid="sprints_edit" icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditSprintDialog(sprint)" />
+          <p-button data-testid="sprints_delete" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(sprint)" />
         </td>
       </tr>
     </ng-template>
@@ -74,55 +74,82 @@
   <div class="form-container">
     <div class="field">
       <label for="name">Name *</label>
-      <input pInputText id="name" [ngModel]="sprintName()" (ngModelChange)="sprintName.set($event)" class="w-full" />
+      <input pInputText data-testid="dlg_sprint_name_input" id="name" [ngModel]="sprintName()" (ngModelChange)="sprintName.set($event)" class="w-full" maxlength="200" />
+      @if (!sprintName().trim()) {
+        <small class="p-error" style="color: red">Name is required</small>
+      }
     </div>
 
     <div class="field">
       <label for="startDate">Start Date *</label>
       <p-datepicker
+        data-testid="dlg_sprint_startdate_picker"
         id="startDate"
         [ngModel]="sprintStartDate()"
         (ngModelChange)="sprintStartDate.set($event)"
         dateFormat="dd/mm/yy"
+        [appendTo]="'body'"
         styleClass="w-full"
       />
+      @if (sprintStartDate() && !isDateValid(sprintStartDate())) {
+        <small class="p-error" style="color: red">Date must be between Jan 28, 1813 and Feb 02, 2222</small>
+      }
     </div>
 
     <div class="field">
       <label for="endDate">End Date *</label>
       <p-datepicker
+        data-testid="dlg_sprint_enddate_picker"
         id="endDate"
         [ngModel]="sprintEndDate()"
         (ngModelChange)="sprintEndDate.set($event)"
         dateFormat="dd/mm/yy"
+        [appendTo]="'body'"
         styleClass="w-full"
       />
+      @if (sprintEndDate() && !isDateValid(sprintEndDate())) {
+        <small class="p-error" style="color: red">Date must be between Jan 28, 1813 and Feb 02, 2222</small>
+      }
+      @if (sprintStartDate() && sprintEndDate() && !areDatesAtLeastOneDayApart()) {
+        <small class="p-error" style="color: red">End date must be at least 1 day after start date</small>
+      }
     </div>
 
     <div class="field">
       <label for="hoursPerDay">Hours per Day *</label>
       <p-inputnumber
+        data-testid="dlg_sprint_hoursperday_input"
         id="hoursPerDay"
         [ngModel]="sprintHoursPerDay()"
         (ngModelChange)="sprintHoursPerDay.set($event)"
         [min]="1"
+        [max]="15"
         styleClass="w-full"
       />
+      @if (!isHoursPerDayValid()) {
+        <small class="p-error" style="color: red">Hours per day must be between 1 and 15</small>
+      }
     </div>
 
     <div class="field">
       <label for="daysPerSprint">Days per Sprint *</label>
       <p-inputnumber
+        data-testid="dlg_sprint_dayspersprint_input"
         id="daysPerSprint"
         [ngModel]="sprintDaysPerSprint()"
         (ngModelChange)="sprintDaysPerSprint.set($event)"
         [min]="1"
+        [max]="getMaxDaysInRange()"
         styleClass="w-full"
       />
+      @if (!isDaysPerSprintValid()) {
+        <small class="p-error" style="color: red">Days per sprint must be between 1 and {{ getMaxDaysInRange() }}</small>
+      }
     </div>
 
     <div class="field-checkbox">
       <p-checkbox
+        data-testid="dlg_sprint_iscurrent_checkbox"
         inputId="isCurrent"
         [ngModel]="sprintIsCurrent()"
         (ngModelChange)="sprintIsCurrent.set($event)"
@@ -133,8 +160,8 @@
   </div>
 
   <ng-template #footer>
-    <p-button label="Cancel" [text]="true" (onClick)="cancelDialog()" />
-    <p-button label="Save" (onClick)="saveSprint()" [disabled]="!isFormValid()" />
+    <p-button data-testid="dlg_sprint_cancel" label="Cancel" [text]="true" (onClick)="cancelDialog()" />
+    <p-button data-testid="dlg_sprint_save" label="Save" (onClick)="saveSprint()" [disabled]="!isFormValid()" />
   </ng-template>
 </p-dialog>
 

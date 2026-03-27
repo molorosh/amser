@@ -12,6 +12,7 @@ import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import { Sprint, createSprint, calculateMaxHours } from '../../models/sprint';
+import { isDateInValidRange } from '../../shared/date-constraints';
 import { Task } from '../../models/task';
 import { Action, createAction } from '../../models/action';
 import { ActionType } from '../../models/action-type';
@@ -120,13 +121,50 @@ export class SprintsPage implements OnInit {
     this.dialogVisible.set(true);
   }
 
+  isDateValid(date: Date | null): boolean {
+    return date ? isDateInValidRange(date) : true;
+  }
+
+  getMaxDaysInRange(): number {
+    const startDate = this.sprintStartDate();
+    const endDate = this.sprintEndDate();
+    if (!startDate || !endDate) return 1;
+    const diffTime = endDate.getTime() - startDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    return Math.max(1, diffDays);
+  }
+
+  areDatesAtLeastOneDayApart(): boolean {
+    const startDate = this.sprintStartDate();
+    const endDate = this.sprintEndDate();
+    if (!startDate || !endDate) return true;
+    const diffTime = endDate.getTime() - startDate.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    return diffDays >= 1;
+  }
+
+  isHoursPerDayValid(): boolean {
+    const hours = this.sprintHoursPerDay();
+    return hours >= 1 && hours <= 15;
+  }
+
+  isDaysPerSprintValid(): boolean {
+    const days = this.sprintDaysPerSprint();
+    return days >= 1 && days <= this.getMaxDaysInRange();
+  }
+
   isFormValid(): boolean {
+    const startDate = this.sprintStartDate();
+    const endDate = this.sprintEndDate();
     return !!(
       this.sprintName().trim() &&
-      this.sprintStartDate() &&
-      this.sprintEndDate() &&
-      this.sprintHoursPerDay() > 0 &&
-      this.sprintDaysPerSprint() > 0
+      startDate &&
+      endDate &&
+      isDateInValidRange(startDate) &&
+      isDateInValidRange(endDate) &&
+      this.areDatesAtLeastOneDayApart() &&
+      this.isHoursPerDayValid() &&
+      this.isDaysPerSprintValid()
     );
   }
 

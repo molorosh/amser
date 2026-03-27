@@ -177,8 +177,22 @@
         }
 
         .hover-button {
+          display: flex;
+          gap: 0.5rem;
           opacity: 0;
           transition: opacity 0.2s ease;
+
+          .remove-btn {
+            ::ng-deep .p-button {
+              background-color: #CC5500;
+              border-color: #CC5500;
+
+              &:hover {
+                background-color: #B34700;
+                border-color: #B34700;
+              }
+            }
+          }
         }
 
         &:hover .hover-button {

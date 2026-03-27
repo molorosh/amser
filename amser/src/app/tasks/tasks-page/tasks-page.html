@@ -1,7 +1,7 @@
 <div class="tasks-container">
   <div class="header">
     <h1>Tasks</h1>
-    <p-button label="New Task" icon="pi pi-plus" (onClick)="openNewTaskDialog()" />
+    <p-button data-testid="tasks_new" label="New Task" icon="pi pi-plus" (onClick)="openNewTaskDialog()" />
   </div>
 
   <div class="filter-section">
@@ -48,6 +48,7 @@
       Not in Current Sprint:
     </span>
     <p-select
+      data-testid="tasks_sprint_filter"
       [options]="sprintFilterOptions()"
       [ngModel]="selectedSprintFilter()"
       (ngModelChange)="selectedSprintFilter.set($event)"
@@ -58,7 +59,7 @@
     />
   </div>
 
-  <p-table [value]="filteredTasks()" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
+  <p-table data-testid="tasks_table" [value]="filteredTasks()" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
     <ng-template #header>
       <tr>
         <th style="width: 5rem"></th>
@@ -74,7 +75,7 @@
       <tr>
         <td>
           @if (selectedSprintFilter()) {
-            <p-button icon="pi pi-plus" [rounded]="true" [text]="true" (onClick)="openAssignDialog(task)" pTooltip="Assign" tooltipPosition="top" />
+            <p-button data-testid="tasks_assign" icon="pi pi-plus" [rounded]="true" [text]="true" (onClick)="openAssignDialog(task)" pTooltip="Assign" tooltipPosition="top" />
           }
         </td>
         <td>{{ task.name }}</td>
@@ -91,8 +92,8 @@
           }
         </td>
         <td>
-          <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditTaskDialog(task)" pTooltip="Edit Task" tooltipPosition="top" />
-          <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(task)" pTooltip="Delete Task" tooltipPosition="top" />
+          <p-button data-testid="tasks_edit" icon="pi pi-pencil" [rounded]="true" [text]="true" (onClick)="openEditTaskDialog(task)" pTooltip="Edit Task" tooltipPosition="top" />
+          <p-button data-testid="tasks_delete" icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" (onClick)="confirmDelete(task)" pTooltip="Delete Task" tooltipPosition="top" />
         </td>
       </tr>
     </ng-template>
@@ -115,12 +116,16 @@
   <div class="form-container">
     <div class="field">
       <label for="name">Name *</label>
-      <input pInputText id="name" [ngModel]="taskName()" (ngModelChange)="taskName.set($event)" class="w-full" />
+      <input pInputText data-testid="dlg_task_name_input" id="name" [ngModel]="taskName()" (ngModelChange)="taskName.set($event)" class="w-full" maxlength="200" />
+      @if (!taskName().trim()) {
+        <small class="p-error" style="color: red">Name is required</small>
+      }
     </div>
 
     <div class="field">
       <label for="taskType">Type *</label>
       <p-select
+        data-testid="dlg_task_type_select"
         id="taskType"
         [options]="taskTypeOptions"
         [ngModel]="taskType()"
@@ -135,21 +140,24 @@
       <label for="description">Description</label>
       <textarea
         pTextarea
+        data-testid="dlg_task_description_textarea"
         id="description"
         [ngModel]="taskDescription()"
         (ngModelChange)="taskDescription.set($event)"
         rows="3"
         class="w-full"
+        maxlength="200"
       ></textarea>
     </div>
 
     <div class="field">
       <label for="url">URL</label>
-      <input pInputText id="url" [ngModel]="taskUrl()" (ngModelChange)="taskUrl.set($event)" class="w-full" />
+      <input pInputText data-testid="dlg_task_url_input" id="url" [ngModel]="taskUrl()" (ngModelChange)="taskUrl.set($event)" class="w-full" maxlength="200" />
     </div>
 
     <div class="field-checkbox">
       <p-checkbox
+        data-testid="dlg_task_autoallocate_checkbox"
         inputId="autoAllocate"
         [ngModel]="taskAutoAllocate()"
         (ngModelChange)="taskAutoAllocate.set($event)"
@@ -160,8 +168,8 @@
   </div>
 
   <ng-template #footer>
-    <p-button label="Cancel" [text]="true" (onClick)="cancelDialog()" />
-    <p-button label="Save" (onClick)="saveTask()" [disabled]="!taskName().trim()" />
+    <p-button data-testid="dlg_task_cancel" label="Cancel" [text]="true" (onClick)="cancelDialog()" />
+    <p-button data-testid="dlg_task_save" label="Save" (onClick)="saveTask()" [disabled]="!taskName().trim()" />
   </ng-template>
 </p-dialog>
 
@@ -176,8 +184,8 @@
   <p>Assign "{{ taskToAssign()?.name }}" to the selected sprint?</p>
 
   <ng-template #footer>
-    <p-button label="Close" [text]="true" (onClick)="closeAssignDialog()" />
-    <p-button label="Assign" (onClick)="assignToSprint()" />
-    <p-button label="Assign and Start" (onClick)="assignAndStart()" />
+    <p-button data-testid="dlg_assign_close" label="Close" [text]="true" (onClick)="closeAssignDialog()" />
+    <p-button data-testid="dlg_assign_confirm" label="Assign" (onClick)="assignToSprint()" />
+    <p-button data-testid="dlg_assign_and_start" label="Assign and Start" (onClick)="assignAndStart()" />
   </ng-template>
 </p-dialog>
