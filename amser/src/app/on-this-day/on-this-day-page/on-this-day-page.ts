@@ -8,6 +8,7 @@ import { Task } from '../../models/task';
 import { TaskType } from '../../models/task-type';
 import { Sprint } from '../../models/sprint';
 import { PersistenceService } from '../../services/persistence.service';
+import { WORKDAYS_SETTING } from '../../genz-settings/genz-settings-page/genz-settings-page';
 
 interface TaskSummary {
   task: Task;
@@ -29,13 +30,30 @@ export class OnThisDayPage implements OnInit {
   tasks = signal<Task[]>([]);
   sprints = signal<Sprint[]>([]);
 
-  selectedDate = signal<Date>(OnThisDayPage.getYesterday());
+  selectedDate = signal<Date>(OnThisDayPage.getLastWorkday([]));
   maxDate = new Date();
 
-  private static getYesterday(): Date {
+  /**
+   * Returns the most recent workday before today.
+   * If workdays is empty, all days are considered workdays (returns yesterday).
+   */
+  private static getLastWorkday(workdays: number[]): Date {
     const d = new Date();
     d.setDate(d.getDate() - 1);
     d.setHours(0, 0, 0, 0);
+
+    if (workdays.length === 0) {
+      return d;
+    }
+
+    // Walk backwards up to 7 days to find a workday
+    for (let i = 0; i < 7; i++) {
+      if (workdays.includes(d.getDay())) {
+        return d;
+      }
+      d.setDate(d.getDate() - 1);
+    }
+
     return d;
   }
 
@@ -126,13 +144,19 @@ export class OnThisDayPage implements OnInit {
 
   async ngOnInit() {
     await this.persistence.whenReady();
-    const [allActions, allTasks, allSprints] = await Promise.all([
+    const [allActions, allTasks, allSprints, workdaysSetting] = await Promise.all([
       this.persistence.getAllActions(),
       this.persistence.getAllTasks(),
       this.persistence.getAllSprints(),
+      this.persistence.getSetting(WORKDAYS_SETTING),
     ]);
     this.actions.set(allActions);
     this.tasks.set(allTasks);
     this.sprints.set(allSprints);
+
+    const workdays: number[] = workdaysSetting?.settingValue
+      ? JSON.parse(workdaysSetting.settingValue)
+      : [];
+    this.selectedDate.set(OnThisDayPage.getLastWorkday(workdays));
   }
 }
