@@ -36,4 +36,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./data/data-page/data-page').then((m) => m.DataPage),
   },
+  {
+    path: 'on-this-day',
+    loadComponent: () =>
+      import('./on-this-day/on-this-day-page/on-this-day-page').then((m) => m.OnThisDayPage),
+  },
 ];
