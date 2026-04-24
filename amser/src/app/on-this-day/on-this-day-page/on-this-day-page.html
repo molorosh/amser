@@ -1,0 +1,51 @@
+<div class="on-this-day-container">
+  <div class="header">
+    <h1>On This Day</h1>
+    <div class="date-picker-wrapper">
+      <i class="pi pi-calendar"></i>
+      <p-datepicker
+        data-testid="on-this-day_date"
+        [ngModel]="selectedDate()"
+        (ngModelChange)="onDateChange($event)"
+        [maxDate]="maxDate"
+        dateFormat="DD dd MM yy"
+        [showIcon]="true"
+        [showButtonBar]="true"
+      />
+    </div>
+  </div>
+
+  @if (taskSummaries().length > 0) {
+    <div class="summary-section">
+      <div class="total-banner">
+        <span class="total-label">Total time tracked</span>
+        <span class="total-hours">{{ grandTotalHours() }} hours</span>
+        <span class="total-meta">across {{ taskSummaries().length }} task{{ taskSummaries().length === 1 ? '' : 's' }}</span>
+      </div>
+
+      <div class="task-summary-list">
+        @for (summary of taskSummaries(); track summary.task.id) {
+          <div class="task-summary-card">
+            <div class="task-icon">
+              <i [class]="taskTypeIcon(summary.task.taskType)"></i>
+            </div>
+            <div class="task-details">
+              <span class="task-name">{{ summary.task.name }}</span>
+              <span class="task-meta">
+                {{ summary.task.taskType }} &middot; {{ summary.sprintName }} &middot; {{ summary.actionCount }} action{{ summary.actionCount === 1 ? '' : 's' }}
+              </span>
+            </div>
+            <div class="task-hours">
+              {{ summary.totalHours }} hrs
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="empty-state">
+      <i class="pi pi-calendar-times empty-icon"></i>
+      <p>No activity recorded on {{ selectedDate() | date: 'EEEE, d MMMM yyyy' }}.</p>
+    </div>
+  }
+</div>
