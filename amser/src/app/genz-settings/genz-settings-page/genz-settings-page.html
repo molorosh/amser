@@ -13,5 +13,25 @@
         (ngModelChange)="onDarkModeChange($event)"
       />
     </div>
+
+    <div class="setting-item workdays-setting">
+      <div class="setting-info">
+        <span class="setting-label">Work Days</span>
+        <span class="setting-description">Select which days are work days. If none are selected, all days are considered work days.</span>
+      </div>
+      <div class="workday-checkboxes">
+        @for (day of days(); track day.value) {
+          <label class="workday-checkbox">
+            <p-checkbox
+              [binary]="true"
+              [ngModel]="day.checked"
+              (ngModelChange)="onWorkdayChange(day.value, $event)"
+              [attr.data-testid]="'settings_workday_' + day.label.toLowerCase()"
+            />
+            <span>{{ day.label }}</span>
+          </label>
+        }
+      </div>
+    </div>
   </div>
 </div>
